@@ -233,7 +233,7 @@ const renderHome = () => {
     state.filters.cuisine !== "all" || state.filters.timeBucket !== "all";
 
   return `
-    <section>
+    <section class="home-screen">
       <header class="screen-header">
         <div>
           <h2 class="screen-title">Global dish list</h2>
@@ -241,91 +241,97 @@ const renderHome = () => {
         </div>
       </header>
 
-      <section class="panel filter-panel">
-        <h3>Filters</h3>
-        <div class="filters-grid">
-          <div class="filter-field">
-            <label for="cuisine-filter">Type of cuisine</label>
-            <select id="cuisine-filter" data-action="filter-cuisine">
-              <option value="all">All cuisines</option>
-              ${CUISINE_OPTIONS.map(
-                (cuisine) => `
-                  <option
-                    value="${escapeHtml(cuisine)}"
-                    ${state.filters.cuisine === cuisine ? "selected" : ""}
-                  >
-                    ${escapeHtml(cuisine)}
-                  </option>
-                `
-              ).join("")}
-            </select>
-          </div>
-
-          <div class="filter-field">
-            <label for="time-filter">Cooking time</label>
-            <select id="time-filter" data-action="filter-time">
-              ${TIME_BUCKET_OPTIONS.map(
-                (bucket) => `
-                  <option
-                    value="${bucket.id}"
-                    ${state.filters.timeBucket === bucket.id ? "selected" : ""}
-                  >
-                    ${bucket.label}
-                  </option>
-                `
-              ).join("")}
-            </select>
-          </div>
-        </div>
-
-        <div class="button-row">
-          <button
-            class="button"
-            data-action="clear-filters"
-            ${hasActiveFilters ? "" : "disabled"}
-          >
-            Clear filters
-          </button>
-        </div>
-      </section>
-
-      ${
-        filteredRecipes.length === 0
-          ? `
-            <section class="panel">
-              <p>No recipes match the selected filters.</p>
-            </section>
-          `
-          : `
-            <ul class="recipe-list">
-              ${filteredRecipes
-                .map(
-                  (recipe) => `
-                    <li class="recipe-card">
-                      <button
-                        class="recipe-card-button"
-                        data-action="open-recipe"
-                        data-id="${escapeHtml(recipe.id)}"
+      <div class="home-layout">
+        <aside class="home-sidebar">
+          <section class="panel filter-panel">
+            <h3>Filters</h3>
+            <div class="filters-grid">
+              <div class="filter-field">
+                <label for="cuisine-filter">Type of cuisine</label>
+                <select id="cuisine-filter" data-action="filter-cuisine">
+                  <option value="all">All cuisines</option>
+                  ${CUISINE_OPTIONS.map(
+                    (cuisine) => `
+                      <option
+                        value="${escapeHtml(cuisine)}"
+                        ${state.filters.cuisine === cuisine ? "selected" : ""}
                       >
-                        <img
-                          class="recipe-thumb"
-                          src="${escapeHtml(recipe.imageUrl)}"
-                          alt="${escapeHtml(recipe.name)}"
-                          loading="lazy"
-                          onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
-                        />
-                        <div class="recipe-card-body">
-                          <h3>${escapeHtml(recipe.name)}</h3>
-                          <p>${escapeHtml(recipe.origin)} • ${formatTimeLabel(recipe.totalTimeMin)}</p>
-                        </div>
-                      </button>
-                    </li>
-                  `
-                )
-                .join("")}
-            </ul>
-          `
-      }
+                        ${escapeHtml(cuisine)}
+                      </option>
+                    `
+                  ).join("")}
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label for="time-filter">Cooking time</label>
+                <select id="time-filter" data-action="filter-time">
+                  ${TIME_BUCKET_OPTIONS.map(
+                    (bucket) => `
+                      <option
+                        value="${bucket.id}"
+                        ${state.filters.timeBucket === bucket.id ? "selected" : ""}
+                      >
+                        ${bucket.label}
+                      </option>
+                    `
+                  ).join("")}
+                </select>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button
+                class="button"
+                data-action="clear-filters"
+                ${hasActiveFilters ? "" : "disabled"}
+              >
+                Clear filters
+              </button>
+            </div>
+          </section>
+        </aside>
+
+        <div class="home-content">
+          ${
+            filteredRecipes.length === 0
+              ? `
+                <section class="panel">
+                  <p>No recipes match the selected filters.</p>
+                </section>
+              `
+              : `
+                <ul class="recipe-list">
+                  ${filteredRecipes
+                    .map(
+                      (recipe) => `
+                        <li class="recipe-card">
+                          <button
+                            class="recipe-card-button"
+                            data-action="open-recipe"
+                            data-id="${escapeHtml(recipe.id)}"
+                          >
+                            <img
+                              class="recipe-thumb"
+                              src="${escapeHtml(recipe.imageUrl)}"
+                              alt="${escapeHtml(recipe.name)}"
+                              loading="lazy"
+                              onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
+                            />
+                            <div class="recipe-card-body">
+                              <h3>${escapeHtml(recipe.name)}</h3>
+                              <p>${escapeHtml(recipe.origin)} • ${formatTimeLabel(recipe.totalTimeMin)}</p>
+                            </div>
+                          </button>
+                        </li>
+                      `
+                    )
+                    .join("")}
+                </ul>
+              `
+          }
+        </div>
+      </div>
     </section>
   `;
 };
