@@ -20,7 +20,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 1rem 1.25rem;
+  padding: 1.1rem 2.15rem;
   border-bottom: 3px solid var(--accent);
   background: var(--bg);
 }
@@ -372,6 +372,10 @@ a {
 }
 
 @media (max-width: 900px) {
+  .top-bar {
+    padding: 1rem 1.5rem;
+  }
+
   .app-shell {
     padding: 1rem;
   }
