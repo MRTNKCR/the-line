@@ -1,6 +1,7 @@
 import { SERIOUS_EATS_OVERRIDES } from "./serious-eats-overrides.js";
 import { SERIOUS_EATS_CONTENT } from "./serious-eats-content.js";
 import { CURATED_CHEF_STEPS } from "./curated-chef-steps.js";
+import { SERIOUS_EATS_IMAGES } from "./serious-eats-images.js";
 
 export const JAPAN_FLAG_RED = "#bc002d";
 
@@ -1760,6 +1761,7 @@ const toRecipe = (seed) => {
       : buildDraftsFromSource(seed, ingredients);
   const instructionsSource =
     curatedDrafts.length > 0 ? "chef-curated-top10" : "serious-eats-scraped";
+  const scrapedImage = SERIOUS_EATS_IMAGES[seed.id] ?? null;
   const detailedDrafts = ensureMinimumStepCount(
     seed,
     ensureCoverage(sourceDrafts, scrapedTimings ?? { prep: 0, rest: 0, cook: 0 })
@@ -1794,8 +1796,14 @@ const toRecipe = (seed) => {
     sourceNote: scraped?.note ?? null,
     instructionsSource,
     recipeYield: scraped?.recipeYield ?? null,
-    imageUrl: `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
-    imageThumbUrl: `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
+    imageUrl:
+      scrapedImage?.imageUrl ??
+      `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
+    imageThumbUrl:
+      scrapedImage?.imageThumbUrl ??
+      `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
+    imageSource:
+      scrapedImage?.sourceUrl ?? `https://source.unsplash.com/?${encodeURIComponent(seed.imageQuery)}`,
     timings,
     totalTimeMin: timings.prep + timings.rest + timings.cook,
     ingredients,

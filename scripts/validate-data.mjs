@@ -16,6 +16,10 @@ for (const recipe of RECIPES) {
     errors.push(`Recipe ${recipe.id} is missing summary/history/source.`);
   }
 
+  if (!recipe.imageUrl || !recipe.imageThumbUrl) {
+    errors.push(`Recipe ${recipe.id} is missing image URLs.`);
+  }
+
   if (!recipe.timings || typeof recipe.timings !== "object") {
     errors.push(`Recipe ${recipe.id} has no timing split.`);
   } else {

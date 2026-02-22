@@ -27,6 +27,7 @@ Outputs:
 - `data/serious-eats-scraped.json` (full scrape log)
 - `data/serious-eats-overrides.js` (runtime timing/source overrides)
 - `data/serious-eats-content.js` (scraped source ingredient + instruction text)
+- `data/serious-eats-images.js` and `.json` (scraped recipe image URLs)
 
 The scraper reads recipe schema data (`application/ld+json`) and extracts:
 
@@ -44,6 +45,13 @@ Instruction pipeline:
 - expands long source instructions into app-readable sub-steps
 - inserts an ingredient staging step that explicitly names all app ingredients
 - retimes all steps so per-phase totals match scraped prep/rest/cook metadata
+
+Image pipeline:
+
+- `scripts/scrape-serious-eats-images.mjs`
+- extracts recipe image URLs from Recipe JSON-LD `image` first
+- falls back to `og:image` / `twitter:image` if needed
+- rejects logos/default placeholders and GIFs
 
 Manual curation layer:
 

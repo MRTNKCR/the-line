@@ -276,6 +276,11 @@ const renderDetail = (recipe) => `
           ? `<p class="muted"><strong>Data note:</strong> ${escapeHtml(recipe.sourceNote)}</p>`
           : ""
       }
+      ${
+        recipe.imageSource
+          ? `<p class="muted"><strong>Photo source:</strong> <a href="${escapeHtml(recipe.imageSource)}" target="_blank" rel="noreferrer">View image reference</a></p>`
+          : ""
+      }
     </section>
 
     <section class="panel">
