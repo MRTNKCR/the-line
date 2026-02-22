@@ -30,6 +30,7 @@ CookFlow is a high-contrast guided-cooking website designed for cooks who want t
   - detailed cooking instructions scraped from Serious Eats recipe steps
   - explicit ingredient staging step that mentions all listed ingredients
   - step durations automatically retimed to match scraped totals
+  - chef-curated instruction pass for top 10 dishes (more actionable wording)
   - ingredients in metric units
   - enriched summary/history text
 
@@ -90,6 +91,7 @@ This updates:
 - `styles.css` – high-contrast UI system
 - `app.js` – app state machine and timed cooking flow
 - `data/recipes.js` – seed dataset + timing template retiming
+- `data/curated-chef-steps.js` – manual chef-curated top 10 step packs
 - `data/serious-eats-overrides.js` – scraped timing/source overrides
 - `data/serious-eats-content.js` – scraped source instructions/ingredients
 - `docs/data-collection.md` – sourcing and enrichment notes

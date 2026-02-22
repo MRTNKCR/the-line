@@ -1,5 +1,6 @@
 import { SERIOUS_EATS_OVERRIDES } from "./serious-eats-overrides.js";
 import { SERIOUS_EATS_CONTENT } from "./serious-eats-content.js";
+import { CURATED_CHEF_STEPS } from "./curated-chef-steps.js";
 
 export const JAPAN_FLAG_RED = "#bc002d";
 
@@ -1498,22 +1499,38 @@ const extractExplicitDurationMin = (detail) => {
   return null;
 };
 
+const buildIngredientSetupStep = (ingredients) => ({
+  title: "Ingredient setup and main components",
+  detail: `Measure and stage all listed ingredients before cooking begins: ${ingredients
+    .map((ingredient) => ingredient.name)
+    .join(", ")}.`,
+  phase: "prep",
+  durationMin: 10,
+});
+
+const buildDraftsFromCurated = (seed, ingredients) => {
+  const curated = CURATED_CHEF_STEPS[seed.id];
+  if (!Array.isArray(curated) || curated.length === 0) {
+    return [];
+  }
+
+  return [
+    buildIngredientSetupStep(ingredients),
+    ...curated.map((step) => ({
+      ...step,
+      phase: step.phase ?? inferStepPhase(step.detail ?? ""),
+      durationMin: Math.max(1, Number(step.durationMin ?? 1)),
+    })),
+  ];
+};
+
 const buildDraftsFromSource = (seed, ingredients) => {
   const content = SERIOUS_EATS_CONTENT[seed.id];
   if (!content || !Array.isArray(content.sourceInstructions)) {
     return [];
   }
 
-  const drafts = [
-    {
-      title: "Ingredient setup and main components",
-      detail: `Measure and stage all listed ingredients before cooking begins: ${ingredients
-        .map((ingredient) => ingredient.name)
-        .join(", ")}.`,
-      phase: "prep",
-      durationMin: 10,
-    },
-  ];
+  const drafts = [buildIngredientSetupStep(ingredients)];
 
   let stepCounter = 1;
   for (const instruction of content.sourceInstructions) {
@@ -1736,7 +1753,13 @@ const toRecipe = (seed) => {
     ...(METHOD_EXTRA_INGREDIENTS[seed.method] ?? []),
   ]);
 
-  const sourceDrafts = buildDraftsFromSource(seed, ingredients);
+  const curatedDrafts = buildDraftsFromCurated(seed, ingredients);
+  const sourceDrafts =
+    curatedDrafts.length > 0
+      ? curatedDrafts
+      : buildDraftsFromSource(seed, ingredients);
+  const instructionsSource =
+    curatedDrafts.length > 0 ? "chef-curated-top10" : "serious-eats-scraped";
   const detailedDrafts = ensureMinimumStepCount(
     seed,
     ensureCoverage(sourceDrafts, scrapedTimings ?? { prep: 0, rest: 0, cook: 0 })
@@ -1769,6 +1792,7 @@ const toRecipe = (seed) => {
     sourceMatchType: scraped?.matchType ?? "search",
     sourceRecipeTitle: scraped?.matchedTitle ?? null,
     sourceNote: scraped?.note ?? null,
+    instructionsSource,
     recipeYield: scraped?.recipeYield ?? null,
     imageUrl: `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
     imageThumbUrl: `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,

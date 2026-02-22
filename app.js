@@ -267,6 +267,11 @@ const renderDetail = (recipe) => `
           : ""
       }
       ${
+        recipe.instructionsSource === "chef-curated-top10"
+          ? `<p class="muted"><strong>Flow quality:</strong> Chef-curated detailed instructions (top 10 priority dish).</p>`
+          : `<p class="muted"><strong>Flow quality:</strong> Serious Eats instruction scrape.</p>`
+      }
+      ${
         recipe.sourceNote
           ? `<p class="muted"><strong>Data note:</strong> ${escapeHtml(recipe.sourceNote)}</p>`
           : ""

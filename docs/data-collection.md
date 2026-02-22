@@ -45,6 +45,12 @@ Instruction pipeline:
 - inserts an ingredient staging step that explicitly names all app ingredients
 - retimes all steps so per-phase totals match scraped prep/rest/cook metadata
 
+Manual curation layer:
+
+- `data/curated-chef-steps.js` contains a chef-style rewrite for the top 10
+  dishes (clear actions, done criteria, and practical sequencing language).
+- When present, curated steps are preferred over auto-scraped instruction text.
+
 ## Enrichment added in MVP
 
 Each recipe includes:
