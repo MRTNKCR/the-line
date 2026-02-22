@@ -204,8 +204,9 @@ const renderHome = () => `
             >
               <img
                 class="recipe-thumb"
-                src="${escapeHtml(recipe.imageThumbUrl)}"
+                src="${escapeHtml(recipe.imageUrl)}"
                 alt="${escapeHtml(recipe.name)}"
+                loading="lazy"
                 onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
               />
               <div class="recipe-card-body">
