@@ -24,6 +24,12 @@ for (const recipe of RECIPES) {
         errors.push(`Recipe ${recipe.id} has invalid ${key} timing.`);
       }
     }
+    const timingTotal = recipe.timings.prep + recipe.timings.rest + recipe.timings.cook;
+    if (timingTotal !== recipe.totalTimeMin) {
+      errors.push(
+        `Recipe ${recipe.id} totalTimeMin (${recipe.totalTimeMin}) does not match timing split (${timingTotal}).`
+      );
+    }
   }
 
   if (!Array.isArray(recipe.ingredients) || recipe.ingredients.length === 0) {
@@ -50,7 +56,7 @@ for (const recipe of RECIPES) {
       if (!step.title || !step.detail || !step.phase) {
         errors.push(`Recipe ${recipe.id} has malformed step fields.`);
       }
-      if (typeof step.durationSec !== "number" || step.durationSec <= 0) {
+      if (typeof step.durationSec !== "number" || step.durationSec < 0) {
         errors.push(`Recipe ${recipe.id} has invalid step duration.`);
       } else {
         computedTotal += Math.round(step.durationSec / 60);

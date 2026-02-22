@@ -15,24 +15,47 @@ This MVP includes **50 globally popular dishes** in a TasteAtlas-focused ranking
 
 ## Sources
 
-For each dish, the dataset stores an internet source pointer:
+For each dish, the dataset stores a **Serious Eats recipe URL** and scraped
+timing metadata.
 
-- **Serious Eats search URL** (e.g., `https://www.seriouseats.com/search?q=<dish>`)
+Pipeline script:
 
-This provides a consistent starting point for validating and refining each recipe against editorial sources.
+- `scripts/scrape-serious-eats.mjs`
+
+Outputs:
+
+- `data/serious-eats-scraped.json` (full scrape log)
+- `data/serious-eats-overrides.js` (runtime timing/source overrides)
+
+The scraper reads recipe schema data (`application/ld+json`) and extracts:
+
+- `prepTime`
+- `cookTime`
+- `totalTime` (including min/max duration objects when present)
+
+Then it derives:
+
+- `rest = total - prep - cook`
 
 ## Enrichment added in MVP
 
 Each recipe includes:
 
 - concise summary and historical context
-- prep / rest / cook time split
+- prep / rest / cook split scraped from Serious Eats where available
 - complete ingredient list in metric units
-- chronological steps with explicit durations
+- chronological steps with explicit durations (retimed to scraped split)
 - planning steps such as:
   - pre-heat oven
   - start boiling water/stock
   - resting windows before finishing
+
+## Matching quality
+
+- `matchType: "exact"` means a direct dish page was found.
+- `matchType: "search"` means the best search-based recipe match was used.
+- `matchType: "proxy"` means Serious Eats has no direct dish page; closest
+  available recipe is used and annotated with a note.
 
 ## Important MVP limitation
 

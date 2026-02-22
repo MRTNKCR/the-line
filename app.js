@@ -93,6 +93,30 @@ const stopTicker = () => {
   ticker = null;
 };
 
+const syncSessionToNonZeroStep = (session, recipe) => {
+  if (!session || !recipe || recipe.steps.length === 0) {
+    return;
+  }
+
+  while (
+    !session.completed &&
+    session.stepIndex < recipe.steps.length &&
+    recipe.steps[session.stepIndex].durationSec === 0
+  ) {
+    if (session.stepIndex >= recipe.steps.length - 1) {
+      session.remainingSec = 0;
+      session.completed = true;
+      session.paused = true;
+      return;
+    }
+    session.stepIndex += 1;
+  }
+
+  if (!session.completed) {
+    session.remainingSec = recipe.steps[session.stepIndex].durationSec;
+  }
+};
+
 const ensureTicker = () => {
   if (ticker) {
     return;
@@ -113,7 +137,7 @@ const ensureTicker = () => {
 
       if (session.stepIndex < recipe.steps.length - 1) {
         session.stepIndex += 1;
-        session.remainingSec = recipe.steps[session.stepIndex].durationSec;
+        syncSessionToNonZeroStep(session, recipe);
       } else {
         session.completed = true;
         session.paused = true;
@@ -133,6 +157,7 @@ const beginCookSession = (recipe, portions) => {
     paused: false,
     completed: false,
   };
+  syncSessionToNonZeroStep(state.cookSession, recipe);
   state.screen = "cooking";
   ensureTicker();
   render();
@@ -155,8 +180,8 @@ const shiftStepManually = (delta) => {
   );
 
   session.stepIndex = nextIndex;
-  session.remainingSec = recipe.steps[nextIndex].durationSec;
   session.completed = false;
+  syncSessionToNonZeroStep(session, recipe);
   render();
 };
 
@@ -236,6 +261,16 @@ const renderDetail = (recipe) => `
           ${escapeHtml(recipe.sourceLabel)}
         </a>
       </p>
+      ${
+        recipe.sourceRecipeTitle
+          ? `<p class="muted"><strong>Matched recipe:</strong> ${escapeHtml(recipe.sourceRecipeTitle)}</p>`
+          : ""
+      }
+      ${
+        recipe.sourceNote
+          ? `<p class="muted"><strong>Data note:</strong> ${escapeHtml(recipe.sourceNote)}</p>`
+          : ""
+      }
     </section>
 
     <section class="panel">
@@ -508,9 +543,9 @@ app.addEventListener("click", (event) => {
         return;
       }
       state.cookSession.stepIndex = 0;
-      state.cookSession.remainingSec = recipe.steps[0].durationSec;
       state.cookSession.paused = false;
       state.cookSession.completed = false;
+      syncSessionToNonZeroStep(state.cookSession, recipe);
       ensureTicker();
       render();
       break;

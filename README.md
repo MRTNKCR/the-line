@@ -25,8 +25,9 @@ CookFlow is a high-contrast guided-cooking website designed for cooks who want t
 
 - 50 globally popular dishes (TasteAtlas-focused seed list)
 - Each dish has:
-  - internet source link (Serious Eats search)
-  - timing metadata for every step
+  - internet source link (Serious Eats recipe page)
+  - prep / rest / cook timings scraped from Serious Eats schema metadata
+  - step durations automatically retimed to match scraped totals
   - ingredients in metric units
   - enriched summary/history text
 
@@ -46,7 +47,7 @@ No build system is required.
 Run:
 
 ```bash
-node ./scripts/validate-data.mjs
+npm run validate-data
 ```
 
 It checks:
@@ -57,12 +58,28 @@ It checks:
 - each recipe has prep/rest/cook split
 - metric-only units
 
+## Refresh Serious Eats timing scrape
+
+```bash
+npm run scrape-serious-eats
+```
+
+This updates:
+
+- `data/serious-eats-scraped.json` (audit output)
+- `data/serious-eats-overrides.js` (runtime timing overrides)
+
+Some dishes have no exact Serious Eats equivalent; those are flagged as
+`matchType: "proxy"` with a note.
+
 ## File overview
 
 - `index.html` – app shell
 - `styles.css` – high-contrast UI system
 - `app.js` – app state machine and timed cooking flow
-- `data/recipes.js` – dish dataset + timing templates
+- `data/recipes.js` – seed dataset + timing template retiming
+- `data/serious-eats-overrides.js` – scraped timing/source overrides
 - `docs/data-collection.md` – sourcing and enrichment notes
+- `scripts/scrape-serious-eats.mjs` – Serious Eats scraping pipeline
 - `scripts/validate-data.mjs` – dataset validation script
 

@@ -1,3 +1,5 @@
+import { SERIOUS_EATS_OVERRIDES } from "./serious-eats-overrides.js";
+
 export const JAPAN_FLAG_RED = "#bc002d";
 
 const UNIVERSAL_INGREDIENTS = [
@@ -1413,15 +1415,93 @@ const buildSteps = (seed) => {
   }));
 };
 
-const toRecipe = (seed) => {
-  const steps = buildSteps(seed);
-  const timings = steps.reduce(
+const normalizeTimings = (rawTimings) => ({
+  prep: Math.max(0, Math.round(Number(rawTimings?.prep ?? 0))),
+  rest: Math.max(0, Math.round(Number(rawTimings?.rest ?? 0))),
+  cook: Math.max(0, Math.round(Number(rawTimings?.cook ?? 0))),
+});
+
+const deriveTimingsFromSteps = (steps) =>
+  steps.reduce(
     (acc, step) => {
       acc[step.phase] += step.durationMin;
       return acc;
     },
     { prep: 0, rest: 0, cook: 0 }
   );
+
+const distributeTargetMinutes = (targetMinutes, stepIndexes, steps) => {
+  if (stepIndexes.length === 0) {
+    return [];
+  }
+  if (targetMinutes <= 0) {
+    return new Array(stepIndexes.length).fill(0);
+  }
+
+  const weights = stepIndexes.map((stepIdx) =>
+    Math.max(1, steps[stepIdx].durationMin)
+  );
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+
+  const base = weights.map((weight) =>
+    Math.floor((targetMinutes * weight) / totalWeight)
+  );
+  const remainders = weights.map((weight, idx) => ({
+    idx,
+    remainder: (targetMinutes * weight) / totalWeight - base[idx],
+  }));
+
+  let allocated = base.reduce((sum, value) => sum + value, 0);
+  remainders.sort((a, b) => b.remainder - a.remainder);
+  let pointer = 0;
+  while (allocated < targetMinutes) {
+    const targetIdx = remainders[pointer % remainders.length].idx;
+    base[targetIdx] += 1;
+    pointer += 1;
+    allocated += 1;
+  }
+
+  return base;
+};
+
+const retimeStepsToMatchTimings = (steps, targetTimings) => {
+  const newDurations = new Array(steps.length).fill(0);
+  const phases = ["prep", "rest", "cook"];
+
+  for (const phase of phases) {
+    const stepIndexes = [];
+    for (let idx = 0; idx < steps.length; idx += 1) {
+      if (steps[idx].phase === phase) {
+        stepIndexes.push(idx);
+      }
+    }
+
+    const targetMinutes = targetTimings[phase] ?? 0;
+    const phaseDurations = distributeTargetMinutes(
+      targetMinutes,
+      stepIndexes,
+      steps
+    );
+    for (let localIdx = 0; localIdx < stepIndexes.length; localIdx += 1) {
+      newDurations[stepIndexes[localIdx]] = phaseDurations[localIdx];
+    }
+  }
+
+  return steps.map((step, idx) => ({
+    ...step,
+    durationMin: newDurations[idx],
+    durationSec: newDurations[idx] * 60,
+  }));
+};
+
+const toRecipe = (seed) => {
+  const scraped = SERIOUS_EATS_OVERRIDES[seed.id] ?? null;
+  const baseSteps = buildSteps(seed);
+  const scrapedTimings = scraped ? normalizeTimings(scraped.timings) : null;
+  const steps = scrapedTimings
+    ? retimeStepsToMatchTimings(baseSteps, scrapedTimings)
+    : baseSteps;
+  const timings = scrapedTimings ?? deriveTimingsFromSteps(steps);
 
   return {
     id: seed.id,
@@ -1431,8 +1511,13 @@ const toRecipe = (seed) => {
     basePortions: 4,
     summary: buildSummary(seed),
     history: buildHistory(seed),
-    sourceUrl: buildSourceUrl(seed.name),
-    sourceLabel: "Serious Eats (internet source search)",
+    sourceUrl: scraped?.sourceUrl ?? buildSourceUrl(seed.name),
+    sourceLabel:
+      scraped?.sourceLabel ?? "Serious Eats (internet source search)",
+    sourceMatchType: scraped?.matchType ?? "search",
+    sourceRecipeTitle: scraped?.matchedTitle ?? null,
+    sourceNote: scraped?.note ?? null,
+    recipeYield: scraped?.recipeYield ?? null,
     imageUrl: `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
     imageThumbUrl: `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
     timings,
