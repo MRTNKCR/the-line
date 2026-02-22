@@ -1,4 +1,4 @@
-name: Deploy CookFlow to GitHub Pages
+name: Deploy The Line to GitHub Pages
 
 on:
   push:

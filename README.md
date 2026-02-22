@@ -1,6 +1,6 @@
-# CookFlow (MVP Web)
+# The Line (MVP Web)
 
-CookFlow is a high-contrast guided-cooking website designed for cooks who want to execute one clear step at a time without constant scrolling.
+The Line is a high-contrast guided-cooking website designed for cooks who want to execute one clear step at a time without constant scrolling.
 
 ## Design constraints implemented
 
