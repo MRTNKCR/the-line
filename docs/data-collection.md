@@ -26,6 +26,7 @@ Outputs:
 
 - `data/serious-eats-scraped.json` (full scrape log)
 - `data/serious-eats-overrides.js` (runtime timing/source overrides)
+- `data/serious-eats-content.js` (scraped source ingredient + instruction text)
 
 The scraper reads recipe schema data (`application/ld+json`) and extracts:
 
@@ -36,6 +37,13 @@ The scraper reads recipe schema data (`application/ld+json`) and extracts:
 Then it derives:
 
 - `rest = total - prep - cook`
+
+Instruction pipeline:
+
+- extracts `recipeInstructions` and `recipeIngredient`
+- expands long source instructions into app-readable sub-steps
+- inserts an ingredient staging step that explicitly names all app ingredients
+- retimes all steps so per-phase totals match scraped prep/rest/cook metadata
 
 ## Enrichment added in MVP
 

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "validate-data": "node ./scripts/validate-data.mjs",
-    "scrape-serious-eats": "node ./scripts/scrape-serious-eats.mjs"
+    "scrape-serious-eats": "node ./scripts/scrape-serious-eats.mjs",
+    "scrape-serious-eats-content": "node ./scripts/scrape-serious-eats-content.mjs"
   }
 }

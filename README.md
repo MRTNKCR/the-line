@@ -27,6 +27,8 @@ CookFlow is a high-contrast guided-cooking website designed for cooks who want t
 - Each dish has:
   - internet source link (Serious Eats recipe page)
   - prep / rest / cook timings scraped from Serious Eats schema metadata
+  - detailed cooking instructions scraped from Serious Eats recipe steps
+  - explicit ingredient staging step that mentions all listed ingredients
   - step durations automatically retimed to match scraped totals
   - ingredients in metric units
   - enriched summary/history text
@@ -72,6 +74,16 @@ This updates:
 Some dishes have no exact Serious Eats equivalent; those are flagged as
 `matchType: "proxy"` with a note.
 
+## Refresh Serious Eats instruction scrape
+
+```bash
+npm run scrape-serious-eats-content
+```
+
+This updates:
+
+- `data/serious-eats-content.js` (source ingredient + instruction content)
+
 ## File overview
 
 - `index.html` – app shell
@@ -79,7 +91,9 @@ Some dishes have no exact Serious Eats equivalent; those are flagged as
 - `app.js` – app state machine and timed cooking flow
 - `data/recipes.js` – seed dataset + timing template retiming
 - `data/serious-eats-overrides.js` – scraped timing/source overrides
+- `data/serious-eats-content.js` – scraped source instructions/ingredients
 - `docs/data-collection.md` – sourcing and enrichment notes
 - `scripts/scrape-serious-eats.mjs` – Serious Eats scraping pipeline
+- `scripts/scrape-serious-eats-content.mjs` – instruction scraping pipeline
 - `scripts/validate-data.mjs` – dataset validation script
 
