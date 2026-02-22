@@ -14,7 +14,26 @@ const state = {
   selectedRecipeId: null,
   portions: 4,
   cookSession: null,
+  filters: {
+    cuisine: "all",
+    timeBucket: "all",
+  },
 };
+
+const CUISINE_OPTIONS = Array.from(new Set(RECIPES.map((recipe) => recipe.origin)))
+  .filter(Boolean)
+  .sort((a, b) => a.localeCompare(b, "en"));
+
+const TIME_BUCKET_OPTIONS = [
+  { id: "all", label: "Any cooking time" },
+  { id: "0-1", label: "0-1 hour" },
+  { id: "1-2", label: "1-2 hours" },
+  { id: "2-3", label: "2-3 hours" },
+  { id: "3+", label: "More than 3 hours" },
+];
+
+const TIME_BUCKET_ID_SET = new Set(TIME_BUCKET_OPTIONS.map((bucket) => bucket.id));
+const CUISINE_OPTION_SET = new Set(CUISINE_OPTIONS);
 
 let ticker = null;
 let lastRenderedActiveStep = -1;
@@ -185,41 +204,131 @@ const shiftStepManually = (delta) => {
   render();
 };
 
-const renderHome = () => `
-  <section>
-    <header class="screen-header">
-      <div>
-        <h2 class="screen-title">Global dish list</h2>
-        <p class="muted">${RECIPES.length} recipes • no filters • one list</p>
-      </div>
-    </header>
-    <ul class="recipe-list">
-      ${RECIPES.map(
-        (recipe) => `
-          <li class="recipe-card">
-            <button
-              class="recipe-card-button"
-              data-action="open-recipe"
-              data-id="${escapeHtml(recipe.id)}"
-            >
-              <img
-                class="recipe-thumb"
-                src="${escapeHtml(recipe.imageUrl)}"
-                alt="${escapeHtml(recipe.name)}"
-                loading="lazy"
-                onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
-              />
-              <div class="recipe-card-body">
-                <h3>${escapeHtml(recipe.name)}</h3>
-                <p>${escapeHtml(recipe.origin)} • ${formatTimeLabel(recipe.totalTimeMin)}</p>
-              </div>
-            </button>
-          </li>
-        `
-      ).join("")}
-    </ul>
-  </section>
-`;
+const matchesTimeBucket = (totalTimeMin, bucketId) => {
+  switch (bucketId) {
+    case "0-1":
+      return totalTimeMin <= 60;
+    case "1-2":
+      return totalTimeMin > 60 && totalTimeMin <= 120;
+    case "2-3":
+      return totalTimeMin > 120 && totalTimeMin <= 180;
+    case "3+":
+      return totalTimeMin > 180;
+    default:
+      return true;
+  }
+};
+
+const getFilteredRecipes = () =>
+  RECIPES.filter((recipe) => {
+    const cuisinePass =
+      state.filters.cuisine === "all" || recipe.origin === state.filters.cuisine;
+    const timePass = matchesTimeBucket(recipe.totalTimeMin, state.filters.timeBucket);
+    return cuisinePass && timePass;
+  });
+
+const renderHome = () => {
+  const filteredRecipes = getFilteredRecipes();
+  const hasActiveFilters =
+    state.filters.cuisine !== "all" || state.filters.timeBucket !== "all";
+
+  return `
+    <section>
+      <header class="screen-header">
+        <div>
+          <h2 class="screen-title">Global dish list</h2>
+          <p class="muted">${filteredRecipes.length} of ${RECIPES.length} recipes shown</p>
+        </div>
+      </header>
+
+      <section class="panel filter-panel">
+        <h3>Filters</h3>
+        <div class="filters-grid">
+          <div class="filter-field">
+            <label for="cuisine-filter">Type of cuisine</label>
+            <select id="cuisine-filter" data-action="filter-cuisine">
+              <option value="all">All cuisines</option>
+              ${CUISINE_OPTIONS.map(
+                (cuisine) => `
+                  <option
+                    value="${escapeHtml(cuisine)}"
+                    ${state.filters.cuisine === cuisine ? "selected" : ""}
+                  >
+                    ${escapeHtml(cuisine)}
+                  </option>
+                `
+              ).join("")}
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="time-filter">Cooking time</label>
+            <select id="time-filter" data-action="filter-time">
+              ${TIME_BUCKET_OPTIONS.map(
+                (bucket) => `
+                  <option
+                    value="${bucket.id}"
+                    ${state.filters.timeBucket === bucket.id ? "selected" : ""}
+                  >
+                    ${bucket.label}
+                  </option>
+                `
+              ).join("")}
+            </select>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button
+            class="button"
+            data-action="clear-filters"
+            ${hasActiveFilters ? "" : "disabled"}
+          >
+            Clear filters
+          </button>
+        </div>
+      </section>
+
+      ${
+        filteredRecipes.length === 0
+          ? `
+            <section class="panel">
+              <p>No recipes match the selected filters.</p>
+            </section>
+          `
+          : `
+            <ul class="recipe-list">
+              ${filteredRecipes
+                .map(
+                  (recipe) => `
+                    <li class="recipe-card">
+                      <button
+                        class="recipe-card-button"
+                        data-action="open-recipe"
+                        data-id="${escapeHtml(recipe.id)}"
+                      >
+                        <img
+                          class="recipe-thumb"
+                          src="${escapeHtml(recipe.imageUrl)}"
+                          alt="${escapeHtml(recipe.name)}"
+                          loading="lazy"
+                          onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
+                        />
+                        <div class="recipe-card-body">
+                          <h3>${escapeHtml(recipe.name)}</h3>
+                          <p>${escapeHtml(recipe.origin)} • ${formatTimeLabel(recipe.totalTimeMin)}</p>
+                        </div>
+                      </button>
+                    </li>
+                  `
+                )
+                .join("")}
+            </ul>
+          `
+      }
+    </section>
+  `;
+};
 
 const renderTimeChips = (timings, total) => `
   <div class="time-grid">
@@ -568,6 +677,12 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
+    case "clear-filters": {
+      state.filters.cuisine = "all";
+      state.filters.timeBucket = "all";
+      render();
+      break;
+    }
     default:
       break;
   }
@@ -587,6 +702,31 @@ app.addEventListener("input", (event) => {
   state.portions = Math.max(1, Math.min(20, raw));
   target.value = state.portions;
   render();
+});
+
+app.addEventListener("change", (event) => {
+  const target = event.target.closest("[data-action]");
+  if (!target) {
+    return;
+  }
+
+  if (target.dataset.action === "filter-cuisine") {
+    const nextValue = target.value;
+    state.filters.cuisine =
+      nextValue === "all" || CUISINE_OPTION_SET.has(nextValue)
+        ? nextValue
+        : "all";
+    render();
+    return;
+  }
+
+  if (target.dataset.action === "filter-time") {
+    const nextValue = target.value;
+    state.filters.timeBucket = TIME_BUCKET_ID_SET.has(nextValue)
+      ? nextValue
+      : "all";
+    render();
+  }
 });
 
 render();
