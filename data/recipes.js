@@ -1,3 +1,8 @@
+import { SERIOUS_EATS_OVERRIDES } from "./serious-eats-overrides.js";
+import { SERIOUS_EATS_CONTENT } from "./serious-eats-content.js";
+import { CURATED_CHEF_STEPS } from "./curated-chef-steps.js";
+import { SERIOUS_EATS_IMAGES } from "./serious-eats-images.js";
+
 export const JAPAN_FLAG_RED = "#bc002d";
 
 const UNIVERSAL_INGREDIENTS = [
@@ -1398,30 +1403,382 @@ const deduplicateIngredients = (ingredients) => {
   );
 };
 
-const buildSteps = (seed) => {
-  const templateFactory = METHOD_STEPS[seed.method] ?? METHOD_STEPS.stovetop;
-  const templateSteps = templateFactory(seed.name);
+const titleCase = (value) =>
+  value
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
 
-  return templateSteps.map((step, idx) => ({
+const splitLongInstruction = (text) => {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (normalized.length <= 220) {
+    return [normalized];
+  }
+
+  const chunks = normalized
+    .split(/;\s+|\.\s+(?=[A-Z])/)
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+
+  if (chunks.length <= 1) {
+    return [normalized];
+  }
+
+  return chunks.map((chunk) =>
+    /[.!?]$/.test(chunk) ? chunk : `${chunk}.`
+  );
+};
+
+const buildInstructionTitle = (text, fallbackIndex) => {
+  const cleaned = text
+    .replace(/^for\s+the\s+[^:]+:\s*/i, "")
+    .replace(/^to\s+serve:\s*/i, "")
+    .trim();
+  const stopIdx = cleaned.search(/[.;:]/);
+  const fragment = stopIdx > 0 ? cleaned.slice(0, stopIdx) : cleaned;
+  const words = fragment.split(/\s+/).slice(0, 8);
+  if (words.length === 0) {
+    return `Detailed step ${fallbackIndex}`;
+  }
+  return titleCase(words.join(" "));
+};
+
+const inferStepPhase = (detail) => {
+  const text = detail.toLowerCase();
+
+  if (
+    /(rest|refrigerate|chill|marinate|proof|rise|cool|stand|soak|freeze|overnight|let .* sit)/.test(
+      text
+    )
+  ) {
+    return "rest";
+  }
+
+  if (
+    /(cook|bake|roast|grill|fry|simmer|boil|sear|saute|sauté|braise|steam|heat|broil|toast|reduce)/.test(
+      text
+    )
+  ) {
+    return "cook";
+  }
+
+  return "prep";
+};
+
+const extractExplicitDurationMin = (detail) => {
+  const text = detail.toLowerCase().replace(/,/g, "");
+  const rangeMatch =
+    /(\d+)\s*(?:to|-|–)\s*(\d+)\s*(hours?|hrs?|minutes?|mins?|min|m)\b/.exec(
+      text
+    );
+  if (rangeMatch) {
+    const low = Number.parseInt(rangeMatch[1], 10);
+    const high = Number.parseInt(rangeMatch[2], 10);
+    const unit = rangeMatch[3];
+    const avg = Math.round((low + high) / 2);
+    return unit.startsWith("h") ? avg * 60 : avg;
+  }
+
+  const hourMinuteMatch =
+    /(\d+)\s*(hours?|hrs?)\s*(?:and)?\s*(\d+)\s*(minutes?|mins?|min|m)\b/.exec(
+      text
+    );
+  if (hourMinuteMatch) {
+    const hours = Number.parseInt(hourMinuteMatch[1], 10);
+    const minutes = Number.parseInt(hourMinuteMatch[3], 10);
+    return hours * 60 + minutes;
+  }
+
+  const singleMatch = /(\d+)\s*(hours?|hrs?|minutes?|mins?|min|m)\b/.exec(text);
+  if (singleMatch) {
+    const value = Number.parseInt(singleMatch[1], 10);
+    const unit = singleMatch[2];
+    return unit.startsWith("h") ? value * 60 : value;
+  }
+
+  return null;
+};
+
+const buildIngredientSetupStep = (ingredients) => ({
+  title: "Ingredient setup and main components",
+  detail: `Measure and stage all listed ingredients before cooking begins: ${ingredients
+    .map((ingredient) => ingredient.name)
+    .join(", ")}.`,
+  phase: "prep",
+  durationMin: 10,
+});
+
+const buildDraftsFromCurated = (seed, ingredients) => {
+  const curated = CURATED_CHEF_STEPS[seed.id];
+  if (!Array.isArray(curated) || curated.length === 0) {
+    return [];
+  }
+
+  return [
+    buildIngredientSetupStep(ingredients),
+    ...curated.map((step) => ({
+      ...step,
+      phase: step.phase ?? inferStepPhase(step.detail ?? ""),
+      durationMin: Math.max(1, Number(step.durationMin ?? 1)),
+    })),
+  ];
+};
+
+const buildDraftsFromSource = (seed, ingredients) => {
+  const content = SERIOUS_EATS_CONTENT[seed.id];
+  if (!content || !Array.isArray(content.sourceInstructions)) {
+    return [];
+  }
+
+  const drafts = [buildIngredientSetupStep(ingredients)];
+
+  let stepCounter = 1;
+  for (const instruction of content.sourceInstructions) {
+    for (const segment of splitLongInstruction(instruction)) {
+      drafts.push({
+        title: buildInstructionTitle(segment, stepCounter),
+        detail: segment,
+        phase: inferStepPhase(segment),
+        durationMin: Math.max(1, extractExplicitDurationMin(segment) ?? 1),
+      });
+      stepCounter += 1;
+    }
+  }
+
+  return drafts;
+};
+
+const ensureCoverage = (drafts, timings) => {
+  const phases = ["prep", "rest", "cook"];
+  const out = [...drafts];
+
+  for (const phase of phases) {
+    if (timings[phase] <= 0) {
+      continue;
+    }
+    const hasPhase = out.some((draft) => draft.phase === phase);
+    if (hasPhase) {
+      continue;
+    }
+
+    out.push({
+      title:
+        phase === "rest"
+          ? "Resting and passive wait window"
+          : phase === "prep"
+            ? "Preparation checkpoint"
+            : "Active cooking checkpoint",
+      detail:
+        phase === "rest"
+          ? "Allow the dish or components to rest for the planned inactive time before continuing."
+          : "Complete the missing phase tasks before moving to the next stage.",
+      phase,
+      durationMin: 1,
+    });
+  }
+
+  return out;
+};
+
+const ensureMinimumStepCount = (seed, drafts) => {
+  if (drafts.length >= 6) {
+    return drafts;
+  }
+
+  const templateFactory = METHOD_STEPS[seed.method] ?? METHOD_STEPS.stovetop;
+  const template = templateFactory(seed.name).map((step) => ({
+    ...step,
+    durationMin: Math.max(1, step.durationMin),
+  }));
+
+  const out = [...drafts];
+  for (const extra of template) {
+    if (out.length >= 6) {
+      break;
+    }
+    out.push(extra);
+  }
+  return out;
+};
+
+const chooseDominantPhase = (group) => {
+  const counts = { prep: 0, rest: 0, cook: 0 };
+  for (const step of group) {
+    counts[step.phase] += 1;
+  }
+  if (counts.cook >= counts.prep && counts.cook >= counts.rest) {
+    return "cook";
+  }
+  if (counts.prep >= counts.rest) {
+    return "prep";
+  }
+  return "rest";
+};
+
+const materializeSteps = (seed, drafts) =>
+  drafts.map((step, idx) => ({
     id: `${seed.id}-step-${idx + 1}`,
     order: idx + 1,
     title: step.title,
     detail: step.detail,
     phase: step.phase,
-    durationMin: step.durationMin,
-    durationSec: step.durationMin * 60,
+    durationMin: Math.max(0, Math.round(step.durationMin ?? 1)),
+    durationSec: Math.max(0, Math.round(step.durationMin ?? 1)) * 60,
   }));
+
+const capTimedSteps = (seed, steps, maxSteps = 20) => {
+  if (steps.length <= maxSteps) {
+    return steps;
+  }
+
+  const [first, ...rest] = steps;
+  const bucketCount = Math.max(1, maxSteps - 1);
+  const buckets = Array.from({ length: bucketCount }, () => []);
+
+  for (let idx = 0; idx < rest.length; idx += 1) {
+    const bucketIndex = Math.floor((idx * bucketCount) / rest.length);
+    buckets[bucketIndex].push(rest[idx]);
+  }
+
+  const merged = [
+    {
+      ...first,
+      id: `${seed.id}-step-1`,
+      order: 1,
+    },
+    ...buckets
+      .filter((bucket) => bucket.length > 0)
+      .map((bucket, bucketIdx) => {
+        const durationMin = bucket.reduce((sum, step) => sum + step.durationMin, 0);
+        return {
+          id: `${seed.id}-step-${bucketIdx + 2}`,
+          order: bucketIdx + 2,
+          title: bucket[0].title,
+          detail: bucket.map((step) => step.detail).join(" "),
+          phase: chooseDominantPhase(bucket),
+          durationMin,
+          durationSec: durationMin * 60,
+        };
+      }),
+  ];
+
+  return merged;
 };
 
-const toRecipe = (seed) => {
-  const steps = buildSteps(seed);
-  const timings = steps.reduce(
+const normalizeTimings = (rawTimings) => ({
+  prep: Math.max(0, Math.round(Number(rawTimings?.prep ?? 0))),
+  rest: Math.max(0, Math.round(Number(rawTimings?.rest ?? 0))),
+  cook: Math.max(0, Math.round(Number(rawTimings?.cook ?? 0))),
+});
+
+const deriveTimingsFromSteps = (steps) =>
+  steps.reduce(
     (acc, step) => {
       acc[step.phase] += step.durationMin;
       return acc;
     },
     { prep: 0, rest: 0, cook: 0 }
   );
+
+const distributeTargetMinutes = (targetMinutes, stepIndexes, steps) => {
+  if (stepIndexes.length === 0) {
+    return [];
+  }
+  if (targetMinutes <= 0) {
+    return new Array(stepIndexes.length).fill(0);
+  }
+
+  const weights = stepIndexes.map((stepIdx) =>
+    Math.max(1, steps[stepIdx].durationMin)
+  );
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+
+  const base = weights.map((weight) =>
+    Math.floor((targetMinutes * weight) / totalWeight)
+  );
+  const remainders = weights.map((weight, idx) => ({
+    idx,
+    remainder: (targetMinutes * weight) / totalWeight - base[idx],
+  }));
+
+  let allocated = base.reduce((sum, value) => sum + value, 0);
+  remainders.sort((a, b) => b.remainder - a.remainder);
+  let pointer = 0;
+  while (allocated < targetMinutes) {
+    const targetIdx = remainders[pointer % remainders.length].idx;
+    base[targetIdx] += 1;
+    pointer += 1;
+    allocated += 1;
+  }
+
+  return base;
+};
+
+const retimeStepsToMatchTimings = (steps, targetTimings) => {
+  const newDurations = new Array(steps.length).fill(0);
+  const phases = ["prep", "rest", "cook"];
+
+  for (const phase of phases) {
+    const stepIndexes = [];
+    for (let idx = 0; idx < steps.length; idx += 1) {
+      if (steps[idx].phase === phase) {
+        stepIndexes.push(idx);
+      }
+    }
+
+    const targetMinutes = targetTimings[phase] ?? 0;
+    const phaseDurations = distributeTargetMinutes(
+      targetMinutes,
+      stepIndexes,
+      steps
+    );
+    for (let localIdx = 0; localIdx < stepIndexes.length; localIdx += 1) {
+      newDurations[stepIndexes[localIdx]] = phaseDurations[localIdx];
+    }
+  }
+
+  return steps.map((step, idx) => ({
+    ...step,
+    durationMin: newDurations[idx],
+    durationSec: newDurations[idx] * 60,
+  }));
+};
+
+const toRecipe = (seed) => {
+  const scraped = SERIOUS_EATS_OVERRIDES[seed.id] ?? null;
+  const scrapedTimings = scraped ? normalizeTimings(scraped.timings) : null;
+  const ingredients = deduplicateIngredients([
+    ...seed.ingredients,
+    ...UNIVERSAL_INGREDIENTS,
+    ...(METHOD_EXTRA_INGREDIENTS[seed.method] ?? []),
+  ]);
+
+  const curatedDrafts = buildDraftsFromCurated(seed, ingredients);
+  const sourceDrafts =
+    curatedDrafts.length > 0
+      ? curatedDrafts
+      : buildDraftsFromSource(seed, ingredients);
+  const instructionsSource =
+    curatedDrafts.length > 0 ? "chef-curated-top10" : "serious-eats-scraped";
+  const scrapedImage = SERIOUS_EATS_IMAGES[seed.id] ?? null;
+  const detailedDrafts = ensureMinimumStepCount(
+    seed,
+    ensureCoverage(sourceDrafts, scrapedTimings ?? { prep: 0, rest: 0, cook: 0 })
+  );
+  const baseSteps =
+    detailedDrafts.length > 0
+      ? materializeSteps(seed, detailedDrafts)
+      : materializeSteps(
+          seed,
+          (METHOD_STEPS[seed.method] ?? METHOD_STEPS.stovetop)(seed.name)
+        );
+
+  const retimedSteps = scrapedTimings
+    ? retimeStepsToMatchTimings(baseSteps, scrapedTimings)
+    : baseSteps;
+  const steps = capTimedSteps(seed, retimedSteps);
+  const timings = scrapedTimings ?? deriveTimingsFromSteps(steps);
 
   return {
     id: seed.id,
@@ -1431,17 +1788,25 @@ const toRecipe = (seed) => {
     basePortions: 4,
     summary: buildSummary(seed),
     history: buildHistory(seed),
-    sourceUrl: buildSourceUrl(seed.name),
-    sourceLabel: "Serious Eats (internet source search)",
-    imageUrl: `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
-    imageThumbUrl: `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
+    sourceUrl: scraped?.sourceUrl ?? buildSourceUrl(seed.name),
+    sourceLabel:
+      scraped?.sourceLabel ?? "Serious Eats (internet source search)",
+    sourceMatchType: scraped?.matchType ?? "search",
+    sourceRecipeTitle: scraped?.matchedTitle ?? null,
+    sourceNote: scraped?.note ?? null,
+    instructionsSource,
+    recipeYield: scraped?.recipeYield ?? null,
+    imageUrl:
+      scrapedImage?.imageUrl ??
+      `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
+    imageThumbUrl:
+      scrapedImage?.imageThumbUrl ??
+      `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
+    imageSource:
+      scrapedImage?.sourceUrl ?? `https://source.unsplash.com/?${encodeURIComponent(seed.imageQuery)}`,
     timings,
     totalTimeMin: timings.prep + timings.rest + timings.cook,
-    ingredients: deduplicateIngredients([
-      ...seed.ingredients,
-      ...UNIVERSAL_INGREDIENTS,
-      ...(METHOD_EXTRA_INGREDIENTS[seed.method] ?? []),
-    ]),
+    ingredients,
     steps,
   };
 };
