@@ -675,19 +675,19 @@ a {
 }
 
 @media (min-width: 901px) {
-  .cook-controls-row .button[data-action="card-prev"] {
+  .cook-controls-row .button:nth-child(1) {
     order: 1;
   }
 
-  .cook-controls-row .button[data-action="restart-cooking"] {
+  .cook-controls-row .button:nth-child(4) {
     order: 2;
   }
 
-  .cook-controls-row .button[data-action="toggle-pause"] {
+  .cook-controls-row .button:nth-child(3) {
     order: 3;
   }
 
-  .cook-controls-row .button[data-action="card-next"] {
+  .cook-controls-row .button:nth-child(2) {
     order: 4;
   }
 
