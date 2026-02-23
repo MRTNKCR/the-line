@@ -577,23 +577,29 @@ const renderHome = () => {
   `;
 };
 
-const renderTimeChips = (timings, total) => `
-  <div class="time-grid">
-    <div class="time-chip">
-      <strong>Preparation</strong>
-      <span>${formatTimeLabel(timings.prep)}</span>
+const renderTimeChips = (timings, total) => {
+  const phases = [
+    { key: "prep", label: "Preparation" },
+    { key: "rest", label: "Resting" },
+    { key: "cook", label: "Cooking" },
+  ].filter((phase) => (timings[phase.key] ?? 0) > 0);
+
+  return `
+    <div class="time-grid">
+      ${phases
+        .map(
+          (phase) => `
+            <div class="time-chip">
+              <strong>${phase.label}</strong>
+              <span>${formatTimeLabel(timings[phase.key])}</span>
+            </div>
+          `
+        )
+        .join("")}
     </div>
-    <div class="time-chip">
-      <strong>Resting</strong>
-      <span>${formatTimeLabel(timings.rest)}</span>
-    </div>
-    <div class="time-chip">
-      <strong>Cooking</strong>
-      <span>${formatTimeLabel(timings.cook)}</span>
-    </div>
-  </div>
-  <p><strong>Total:</strong> ${formatTimeLabel(total)}</p>
-`;
+    <p><strong>Total:</strong> ${formatTimeLabel(total)}</p>
+  `;
+};
 
 const renderDetail = (recipe) => `
   <article class="detail-layout">
