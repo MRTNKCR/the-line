@@ -415,6 +415,10 @@ body {
   z-index: 2;
 }
 
+.progress-track-step {
+  margin-bottom: 0.1rem;
+}
+
 .step-topline {
   display: flex;
   align-items: center;
@@ -431,12 +435,26 @@ body {
   font-weight: 700;
 }
 
+.step-media-row {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.95fr) minmax(220px, 1.35fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.step-timer-stack {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
 .countdown-hero {
   margin: 0;
-  min-width: 6.7ch;
+  min-width: 6.2ch;
   font-size: clamp(2.25rem, 7vw, 3.4rem);
   line-height: 1;
   font-weight: 800;
+  justify-self: start;
 }
 
 .countdown-hero.is-ending {
@@ -454,6 +472,16 @@ body {
 
 .cue-note.is-visible {
   color: var(--accent);
+}
+
+.cook-step-image {
+  width: 100%;
+  min-height: 140px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  display: block;
 }
 
 .step-detail {
@@ -659,6 +687,16 @@ a {
 
   .cook-step-card {
     min-height: 340px;
+  }
+
+  .step-media-row {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .cook-step-image {
+    max-height: 210px;
+    aspect-ratio: 4 / 3;
   }
 
   .countdown-hero {

@@ -1,0 +1,502 @@
+{
+  "pizza-napoletana": {
+    "sourceUrl": "https://www.seriouseats.com/how-to-make-grilled-pizza-napoletana-on-a-barbecue-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/L3RJmyt0q9Lwdo3rYG2o0ZADfZM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100527-grilled-pizza-opener-thumb-560x373-91806-63b0ede4ccb14a7885ae361e267af8f2.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/L3RJmyt0q9Lwdo3rYG2o0ZADfZM=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100527-grilled-pizza-opener-thumb-560x373-91806-63b0ede4ccb14a7885ae361e267af8f2.jpg"
+    ]
+  },
+  "sushi": {
+    "sourceUrl": "https://www.seriouseats.com/sumeshi-seasoned-sushi-rice-recipe-7253896",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/Kt9UmmQcx9EY-DhCamxpF3qoEPk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20230310-SEA-Sumeshi-hero-Theng-Khang-4b19e8faf32d4ec6a7346a92208fd031.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/Kt9UmmQcx9EY-DhCamxpF3qoEPk=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20230310-SEA-Sumeshi-hero-Theng-Khang-4b19e8faf32d4ec6a7346a92208fd031.JPG"
+    ]
+  },
+  "ramen": {
+    "sourceUrl": "https://www.seriouseats.com/15-minute-miso-butter-ramen-recipe-11907783",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/a7DckKQrUF4T7B335zpcUtjnEQw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20260217-SEA-miso-butter-ramen-Jen-Causey-HERO-83d2ee55b1ce408bab554cb9edd3dc13.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/a7DckKQrUF4T7B335zpcUtjnEQw=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20260217-SEA-miso-butter-ramen-Jen-Causey-HERO-83d2ee55b1ce408bab554cb9edd3dc13.jpg"
+    ]
+  },
+  "paella-valenciana": {
+    "sourceUrl": "https://www.seriouseats.com/grilled-paella-mixta-mixed-paella-with-chicken-and-seafood",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/itWv535m4NfNxxviEPm9Rw501vk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2019__07__20190618-grilled-paella-vicky-wasik-14-7dd0504ff05046ba8082f77d6210add4.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/itWv535m4NfNxxviEPm9Rw501vk=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2019__07__20190618-grilled-paella-vicky-wasik-14-7dd0504ff05046ba8082f77d6210add4.jpg"
+    ]
+  },
+  "tacos-al-pastor": {
+    "sourceUrl": "https://www.seriouseats.com/tacos-al-pastor-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/4kbwN13BlZnZ3EywrtG2AzCKuYs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20210712-tacos-al-pastor-melissa-hom-seriouseats-37-f72cdd02c9574bceb1eef1c8a23b76ed.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/4kbwN13BlZnZ3EywrtG2AzCKuYs=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20210712-tacos-al-pastor-melissa-hom-seriouseats-37-f72cdd02c9574bceb1eef1c8a23b76ed.jpg"
+    ]
+  },
+  "pad-thai": {
+    "sourceUrl": "https://www.seriouseats.com/pad-thai-recipe-11680356",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/gLZ3ZlKXVTGpgspZvvS8Afnw2TA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20250214-SEA-PadThai-AmandaSuarez-hero-4251c730d61a40ba935f2d43153d6862.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/gLZ3ZlKXVTGpgspZvvS8Afnw2TA=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20250214-SEA-PadThai-AmandaSuarez-hero-4251c730d61a40ba935f2d43153d6862.jpg"
+    ]
+  },
+  "biryani": {
+    "sourceUrl": "https://www.seriouseats.com/biryani-style-roast-chicken-recipe-8661770",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/1PXiv2YBTEvInc5HyiTSlTacJAY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20240611-SEA-BiryaniStyleRoastChicken-KanikaandJatin-Sharma-Hero-6f756fad4526486fb33f4369761414d2.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/1PXiv2YBTEvInc5HyiTSlTacJAY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20240611-SEA-BiryaniStyleRoastChicken-KanikaandJatin-Sharma-Hero-6f756fad4526486fb33f4369761414d2.jpg"
+    ]
+  },
+  "peking-duck": {
+    "sourceUrl": "https://www.seriouseats.com/peking-duck-mandarin-pancakes-plum-sauce-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/5WEmtEV2Y37pU1joxKllpZ7uvDo=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100910-duck-primary-43f6bb74c3b7490b9b6b99b643fd31f3.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/5WEmtEV2Y37pU1joxKllpZ7uvDo=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100910-duck-primary-43f6bb74c3b7490b9b6b99b643fd31f3.jpg"
+    ]
+  },
+  "tom-yum-goong": {
+    "sourceUrl": "https://www.seriouseats.com/creamy-tom-yam-kung-thai-hot-and-sour-soup-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/kwBOTlx5CRwRrMUwgoWsYDTV_YM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__02__20120202-1911120-tom-yam-kung-tom-yam-primary-49f1bce0e2e044f4855a8edff4fa577c.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/kwBOTlx5CRwRrMUwgoWsYDTV_YM=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__02__20120202-1911120-tom-yam-kung-tom-yam-primary-49f1bce0e2e044f4855a8edff4fa577c.jpg"
+    ]
+  },
+  "pho-bo": {
+    "sourceUrl": "https://www.seriouseats.com/traditional-beef-pho-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/U-hWLnDmSZ8_6v07v0yc-8uYxrE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__06__20120629-pho-food-lab-19-c94bfd465387441f83ee8939fdf67dbe.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/U-hWLnDmSZ8_6v07v0yc-8uYxrE=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__06__20120629-pho-food-lab-19-c94bfd465387441f83ee8939fdf67dbe.jpg"
+    ]
+  },
+  "lasagna-alla-bolognese": {
+    "sourceUrl": "https://www.seriouseats.com/vegan-lasagna-alla-bolognese",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/gUYBAC2s6iOyMo8YEO2fBtziAoA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2018__03__20180305-vegan-lasagna-bolognese-seitan-mushrooms-vicky-wasik22-d8d72353225b4955af5ccafdd95b17a5.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/gUYBAC2s6iOyMo8YEO2fBtziAoA=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2018__03__20180305-vegan-lasagna-bolognese-seitan-mushrooms-vicky-wasik22-d8d72353225b4955af5ccafdd95b17a5.jpg"
+    ]
+  },
+  "butter-chicken": {
+    "sourceUrl": "https://www.seriouseats.com/floyd-cardozs-butter-chicken-tikka-masala-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/VZSWJGCUO_uixsf0hBUgxluyI94=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__05__butter-chicken-floyd-cardoz-nyce-1-9cacf9d9b4dc4755825be49dae814980.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/VZSWJGCUO_uixsf0hBUgxluyI94=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__05__butter-chicken-floyd-cardoz-nyce-1-9cacf9d9b4dc4755825be49dae814980.jpg"
+    ]
+  },
+  "croissant": {
+    "sourceUrl": "https://www.seriouseats.com/croissants-recipe-11863500",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/9qXfRA4BdcvhlDDbAPVK3UxBBFQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20251205-SEA-Croissants-DebbieWee-HERO-13-1-0da8589de5fc4885803198675db385d6.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/9qXfRA4BdcvhlDDbAPVK3UxBBFQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20251205-SEA-Croissants-DebbieWee-HERO-13-1-0da8589de5fc4885803198675db385d6.jpg"
+    ]
+  },
+  "cheeseburger": {
+    "sourceUrl": "https://www.seriouseats.com/ultra-smashed-cheeseburger-recipe-food-lab",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/E5GunDCYj2tU1MeIEjeIw1i8BA0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20240304-SEA-Smashburger-AmandaSuarez-04-04c23462bc974ddf8d9fe1276630520c.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/E5GunDCYj2tU1MeIEjeIw1i8BA0=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20240304-SEA-Smashburger-AmandaSuarez-04-04c23462bc974ddf8d9fe1276630520c.jpg"
+    ]
+  },
+  "doner-kebab": {
+    "sourceUrl": "https://www.seriouseats.com/adana-kebab-turkish-ground-lamb-kebab-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/IVzgrLg6lmc_VvMjsfZAxI6Cx3E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2014__04__20140428-adana-kebab-22-2f4debebf43d462ba045e041a9e9add4.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/IVzgrLg6lmc_VvMjsfZAxI6Cx3E=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2014__04__20140428-adana-kebab-22-2f4debebf43d462ba045e041a9e9add4.jpg"
+    ]
+  },
+  "pierogi": {
+    "sourceUrl": "https://www.seriouseats.com/pierogi-recipe-5220146",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/4kbif44kapg0KVb5oXtG2n6zigQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220303-pierogi-vicky-wasik-57-ebc147e5870e4544add8cd880f75125c.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/4kbif44kapg0KVb5oXtG2n6zigQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20220303-pierogi-vicky-wasik-57-ebc147e5870e4544add8cd880f75125c.jpg"
+    ]
+  },
+  "feijoada": {
+    "sourceUrl": "https://www.seriouseats.com/hardcore-feijoada-brazilian-stew-pork-beans-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/OLi6XK1OSO-Ejog4iAyY2j7tBqY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20110308-Feijoada-13-dc9c888f37ab4d5f9ab8c9fc52b8b6ac.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/OLi6XK1OSO-Ejog4iAyY2j7tBqY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20110308-Feijoada-13-dc9c888f37ab4d5f9ab8c9fc52b8b6ac.jpg"
+    ]
+  },
+  "ceviche": {
+    "sourceUrl": "https://www.seriouseats.com/classic-peruvian-style-fish-ceviche-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/wCvewsTTcZQ-PPv-HQSD3gs_CQg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2011__07__20110720-food-lab-ceviche-primary-db180c5f277648e6a32a3fcb80c3514b.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/wCvewsTTcZQ-PPv-HQSD3gs_CQg=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2011__07__20110720-food-lab-ceviche-primary-db180c5f277648e6a32a3fcb80c3514b.jpg"
+    ]
+  },
+  "moussaka": {
+    "sourceUrl": "https://www.seriouseats.com/moussaka-6361068",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/cfFTwhtdanYtMN36s4v_9gLCqm4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220628-Moussaka-AmandaSuarez-47-hero-75e0db71b66b4901828254ce4cb06d5b.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/cfFTwhtdanYtMN36s4v_9gLCqm4=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20220628-Moussaka-AmandaSuarez-47-hero-75e0db71b66b4901828254ce4cb06d5b.JPG"
+    ]
+  },
+  "churrasco": {
+    "sourceUrl": "https://www.seriouseats.com/churrasco-steak-recipe-7968650",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/tcyBXy44r1NN3PEbVM9deNPSB40=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20230913-SEA-Churrasco-Steak-AmandaSuarez-hero-2-ce2dcb9c7af944e5934ef94c932fef82.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/tcyBXy44r1NN3PEbVM9deNPSB40=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20230913-SEA-Churrasco-Steak-AmandaSuarez-hero-2-ce2dcb9c7af944e5934ef94c932fef82.jpg"
+    ]
+  },
+  "bibimbap": {
+    "sourceUrl": "https://www.seriouseats.com/bibimbap-recipe-7094731",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/9gYczIvS4R7ZvK19ahBns0xOG_k=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20230113-Bibimbap-AmandaSuarez-hero-331e5e1ffa5b400fbb684e59b14d57c1.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/9gYczIvS4R7ZvK19ahBns0xOG_k=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20230113-Bibimbap-AmandaSuarez-hero-331e5e1ffa5b400fbb684e59b14d57c1.JPG"
+    ]
+  },
+  "shakshuka": {
+    "sourceUrl": "https://www.seriouseats.com/shakshuka-north-african-shirred-eggs-tomato-pepper-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/GGe7ElpAahWNo9W6c6mAx0utvFg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__09__20160926-shakshuka-17-a2b1d35f5ce146d1b8f5e2851e73b487.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/GGe7ElpAahWNo9W6c6mAx0utvFg=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__09__20160926-shakshuka-17-a2b1d35f5ce146d1b8f5e2851e73b487.jpg"
+    ]
+  },
+  "goulash": {
+    "sourceUrl": "https://www.seriouseats.com/hungarian-goulash-beef-paprika-stew-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/PANBZujlgTkG3UYNWkd3jKUvCnc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__01__20160205-beef-goulash-hungarian-recipe-food-lab-26-603da3113a1d47b2a114d1a2fa2497d4.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/PANBZujlgTkG3UYNWkd3jKUvCnc=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__01__20160205-beef-goulash-hungarian-recipe-food-lab-26-603da3113a1d47b2a114d1a2fa2497d4.jpg"
+    ]
+  },
+  "falafel": {
+    "sourceUrl": "https://www.seriouseats.com/smash-falafel-pitas-recipe-11878687",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/VORQx8UhqWO3uh1uQ7WBz7bXEMs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20240618SEA-SmashFalafel-HannahHufham-00-74ef19cd4ae34ed891530b848e69b20d.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/VORQx8UhqWO3uh1uQ7WBz7bXEMs=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20240618SEA-SmashFalafel-HannahHufham-00-74ef19cd4ae34ed891530b848e69b20d.jpg"
+    ]
+  },
+  "fish-and-chips": {
+    "sourceUrl": "https://www.seriouseats.com/fish-and-chips-recipe-11690853",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/q3qY4OpVd--C6DUxGDq-I_vVojI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20250304-FishandChips-AmandaSuarez-23-afe9115959594e299f88afa6ef9156e2.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/q3qY4OpVd--C6DUxGDq-I_vVojI=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20250304-FishandChips-AmandaSuarez-23-afe9115959594e299f88afa6ef9156e2.jpg"
+    ]
+  },
+  "coq-au-vin": {
+    "sourceUrl": "https://www.seriouseats.com/coq-au-vin-chicken-red-wine-braise-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/xJkYkVBKZdlBLLi5-1rAfa31YTQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/coq-au-vin-chicken-red-wine-braise-recipe-hero-01_2-985a89509805473caaa3d71cfc98919a.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/xJkYkVBKZdlBLLi5-1rAfa31YTQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/coq-au-vin-chicken-red-wine-braise-recipe-hero-01_2-985a89509805473caaa3d71cfc98919a.JPG"
+    ]
+  },
+  "ratatouille": {
+    "sourceUrl": "https://www.seriouseats.com/ratatouille-provence-vegetable-stew-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/Idf6ZeJluIky_pOoXrqU0hqFD4M=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__08__20150803-ratatouille-vicky-wasik-8-51fa5e1b3e7f457aaeced2a4da3711aa.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/Idf6ZeJluIky_pOoXrqU0hqFD4M=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__08__20150803-ratatouille-vicky-wasik-8-51fa5e1b3e7f457aaeced2a4da3711aa.jpg"
+    ]
+  },
+  "gnocchi-al-pesto": {
+    "sourceUrl": "https://www.seriouseats.com/ricotta-gnocchi-homemade-food-lab-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/kQ2zR2xi3IOYol_2GGG6W5HfTZs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ricotta-gnocchi-homemade-food-lab-recipe-hero-01-94285c390c56416ab6f550428b4656ce.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/kQ2zR2xi3IOYol_2GGG6W5HfTZs=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/ricotta-gnocchi-homemade-food-lab-recipe-hero-01-94285c390c56416ab6f550428b4656ce.JPG"
+    ]
+  },
+  "katsu-curry": {
+    "sourceUrl": "https://www.seriouseats.com/japanese-curry-kare",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/5OT_fR0MKz94d4WXn2VAnRAAbag=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2017__12__20171127-japanese-curry-vicky-wasik-17-ddb305d228934e2ca19341306ec6b0ae.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/5OT_fR0MKz94d4WXn2VAnRAAbag=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2017__12__20171127-japanese-curry-vicky-wasik-17-ddb305d228934e2ca19341306ec6b0ae.jpg"
+    ]
+  },
+  "jollof-rice": {
+    "sourceUrl": "https://www.seriouseats.com/nigerian-jollof-rice-recipe-6741471",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/UG-tX_LRPOZszzorA_-hFZdmwLg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220908-nigerian-jollof-rice-maureen-celestine-hero-no-spoon-29f44ba966324fff8149c05d0ecca7b7.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/UG-tX_LRPOZszzorA_-hFZdmwLg=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20220908-nigerian-jollof-rice-maureen-celestine-hero-no-spoon-29f44ba966324fff8149c05d0ecca7b7.JPG"
+    ]
+  },
+  "lamb-tagine": {
+    "sourceUrl": "https://www.seriouseats.com/lamb-and-prune-tagine-recipe-11681891",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/EE3cPDVA0wyWEFJLCeZ0AfAiEJU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20250129-SEA-LambandPruneTagine-LarisaNiedle-Beauty2-17-00dff2570ad549bd8cc3af00da951e39.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/EE3cPDVA0wyWEFJLCeZ0AfAiEJU=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20250129-SEA-LambandPruneTagine-LarisaNiedle-Beauty2-17-00dff2570ad549bd8cc3af00da951e39.jpg"
+    ]
+  },
+  "hummus-and-pita": {
+    "sourceUrl": "https://www.seriouseats.com/hummus-msabbaha-masabacha-musabbaha-chickpea-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/pg62yz1lTxXG4zoL3daiOpcsf5Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__images__2017__11__20170929-hummus-masbacha-vicky-wasik-4-47b14ca6944641fcb4cdf7fa2f0d4199.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/pg62yz1lTxXG4zoL3daiOpcsf5Q=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__images__2017__11__20170929-hummus-masbacha-vicky-wasik-4-47b14ca6944641fcb4cdf7fa2f0d4199.jpg"
+    ]
+  },
+  "kimchi-jjigae": {
+    "sourceUrl": "https://www.seriouseats.com/momofuku-david-chang-kimchi-stew-with-rice-cakes-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/ryRzQi6nTX_PJ_SzI5-gMsPMvZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100304-seriouslyasian-kimchistew1-04159e6d7b464ad4b5a6952a6236520f.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/ryRzQi6nTX_PJ_SzI5-gMsPMvZQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20100304-seriouslyasian-kimchistew1-04159e6d7b464ad4b5a6952a6236520f.jpg"
+    ]
+  },
+  "poutine": {
+    "sourceUrl": "https://www.seriouseats.com/ultimate-perfect-poutine-fries-cheese-curds-gravy-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/vICHAu16XWhAc-WLQV-7avihHKY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ultimate-perfect-poutine-fries-cheese-curds-gravy-recipe-hero-2-7637732f8c174bc59f9b84e7b6e6b660.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/vICHAu16XWhAc-WLQV-7avihHKY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/ultimate-perfect-poutine-fries-cheese-curds-gravy-recipe-hero-2-7637732f8c174bc59f9b84e7b6e6b660.jpg"
+    ]
+  },
+  "clam-chowder": {
+    "sourceUrl": "https://www.seriouseats.com/new-england-clam-chowder-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/rcDf1jsK3-TuKOC2YFgYV51nJN4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2013__01__20130109-clam-chowder-36-369325ec69764006ac16d54450ba1222.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/rcDf1jsK3-TuKOC2YFgYV51nJN4=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2013__01__20130109-clam-chowder-36-369325ec69764006ac16d54450ba1222.jpg"
+    ]
+  },
+  "souvlaki": {
+    "sourceUrl": "https://www.seriouseats.com/grilling-pork-souvlaki-with-pita-and-tzatziki-recipe-greek",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/qAysZs1vJYvMCSSpsHRqRlsvExQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20090319-pork-souvlaki-9a80ec7534d3427c888d2d0f939540a6.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/qAysZs1vJYvMCSSpsHRqRlsvExQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20090319-pork-souvlaki-9a80ec7534d3427c888d2d0f939540a6.jpg"
+    ]
+  },
+  "arepas": {
+    "sourceUrl": "https://www.seriouseats.com/cheese-stuffed-colombian-style-arepas-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/60b-pDmjH7i2q72OI11GfpJWVBE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__04__20111214-arepas-2-18-c5ffb234c0704eeda8cbb26bc1fcd30c.jpeg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/60b-pDmjH7i2q72OI11GfpJWVBE=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2012__04__20111214-arepas-2-18-c5ffb234c0704eeda8cbb26bc1fcd30c.jpeg"
+    ]
+  },
+  "chicken-adobo": {
+    "sourceUrl": "https://www.seriouseats.com/filipino-style-chicken-adobo-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/uc8nb040OwgXekR9obuhEqm8WoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2019__10__20191023-chicken-adobo-vicky-wasik-19-12ce105a2e1a44dfb1e2673775118064.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/uc8nb040OwgXekR9obuhEqm8WoI=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__2019__10__20191023-chicken-adobo-vicky-wasik-19-12ce105a2e1a44dfb1e2673775118064.jpg"
+    ]
+  },
+  "empanadas": {
+    "sourceUrl": "https://www.seriouseats.com/beef-jerky-empanadas-recipe-11750972",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/3PbcqvVmMKvJmm3-Tl4DbY-WTYc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220629-beef-jerky-empanadas-kevin-vaughn-Hero-b838b8f801ad41e79c6c2f0f9af478b7.JPG"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/3PbcqvVmMKvJmm3-Tl4DbY-WTYc=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20220629-beef-jerky-empanadas-kevin-vaughn-Hero-b838b8f801ad41e79c6c2f0f9af478b7.JPG"
+    ]
+  },
+  "beef-rendang": {
+    "sourceUrl": "https://www.seriouseats.com/beef-rendang-recipe-8731804",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/f13Cq00vkjMqOF2ApkKRQsRF-U4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20241007-SEA-BeefRendang-QiAi-Hero1-37-bb47c42aabec4ac8aa66f49cfca1cf0f.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/f13Cq00vkjMqOF2ApkKRQsRF-U4=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20241007-SEA-BeefRendang-QiAi-Hero1-37-bb47c42aabec4ac8aa66f49cfca1cf0f.jpg"
+    ]
+  },
+  "laksa": {
+    "sourceUrl": "https://www.seriouseats.com/curry-laksa-recipe-11796414",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/WJtuw2Fthow5Q534ttKwzbAOdyY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/2025081420250722-SEA-CurryLaksa-TwoBites-25-d817362f09784ea1936c8b0219a41f6c.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/WJtuw2Fthow5Q534ttKwzbAOdyY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/2025081420250722-SEA-CurryLaksa-TwoBites-25-d817362f09784ea1936c8b0219a41f6c.jpg"
+    ]
+  },
+  "okonomiyaki": {
+    "sourceUrl": "https://www.seriouseats.com/okonomiyaki-japanese-pancake-cabbage-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/s4xBtrzOlvyFS22puQlctlFfjUY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__images__2016__04__20160415-okonomiyaki-39-edf9c389b7db404fa55b6e18cdf9e9bd.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/s4xBtrzOlvyFS22puQlctlFfjUY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__images__2016__04__20160415-okonomiyaki-39-edf9c389b7db404fa55b6e18cdf9e9bd.jpg"
+    ]
+  },
+  "gyoza": {
+    "sourceUrl": "https://www.seriouseats.com/the-best-japanese-pork-and-cabbage-dumplings-gyoza-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/_EcB46gGcgDdNxgcTcgUP07A9M4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__03__20150309-gyoza-how-to-japanese-dumpling-recipe-01-3ed20194de34455fb5eac8ad2af1b7a4.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/_EcB46gGcgDdNxgcTcgUP07A9M4=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2015__03__20150309-gyoza-how-to-japanese-dumpling-recipe-01-3ed20194de34455fb5eac8ad2af1b7a4.jpg"
+    ]
+  },
+  "baklava": {
+    "sourceUrl": "https://www.seriouseats.com/homemade-pistachio-baklava-recipe-8742422",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/_9J8JsDfX5RQu2-J96o7M5sMLWY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20230712-SEA-PistachioBaklava-MaiKakish-hero-blue-6d2cb4dbdc53446f8b33ad6a2e3f6f8a.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/_9J8JsDfX5RQu2-J96o7M5sMLWY=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20230712-SEA-PistachioBaklava-MaiKakish-hero-blue-6d2cb4dbdc53446f8b33ad6a2e3f6f8a.jpg"
+    ]
+  },
+  "wiener-schnitzel": {
+    "sourceUrl": "https://www.seriouseats.com/wiener-schnitzel-recipe-11849886",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/NV41iquT8i6JlezGVrMLzjEB-gw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20251114-SEA-Wienerschnitzel-AmandaSuarez-HERO-eba97daaa1ae4f6b9d5ae385d15f26e0.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/NV41iquT8i6JlezGVrMLzjEB-gw=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20251114-SEA-Wienerschnitzel-AmandaSuarez-HERO-eba97daaa1ae4f6b9d5ae385d15f26e0.jpg"
+    ]
+  },
+  "beef-bourguignon": {
+    "sourceUrl": "https://www.seriouseats.com/beef-bourguignon-red-wine-stew-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/_CovX26D-Z6wpeDYJXGhFhA47H8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MMPSOUPSANDSTEWS-SEA-BoeufBourguignon-FredHardyII-000-991c38a78f934722954c47567b6be97b.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/_CovX26D-Z6wpeDYJXGhFhA47H8=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/MMPSOUPSANDSTEWS-SEA-BoeufBourguignon-FredHardyII-000-991c38a78f934722954c47567b6be97b.jpg"
+    ]
+  },
+  "fajitas": {
+    "sourceUrl": "https://www.seriouseats.com/grilled-skirt-steak-fajitas-food-lab-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/mVZyOkRQQ_0Y5KhDyTnK2kHbAiQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20210630-grilled-skirt-steak-fajitas-melissa-hom-seriouseats-13-ddd71ba2fe4041e59179e26989205617.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/mVZyOkRQQ_0Y5KhDyTnK2kHbAiQ=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/20210630-grilled-skirt-steak-fajitas-melissa-hom-seriouseats-13-ddd71ba2fe4041e59179e26989205617.jpg"
+    ]
+  },
+  "carbonara": {
+    "sourceUrl": "https://www.seriouseats.com/pasta-carbonara-sauce-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/_HZ_sHQTMECiOBr6eBoN5sdZZV4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__02__20151118-spaghetti-carbonara-vicky-wasik-27-5ed8e4c860c945f0a3c4315a25a7001b.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/_HZ_sHQTMECiOBr6eBoN5sdZZV4=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2016__02__20151118-spaghetti-carbonara-vicky-wasik-27-5ed8e4c860c945f0a3c4315a25a7001b.jpg"
+    ]
+  },
+  "risotto-alla-milanese": {
+    "sourceUrl": "https://www.seriouseats.com/risotto-alla-milanese-saffron-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/uplXsgBG7V6fZpXZLB0S8CyYrD0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/risotto-alla-milanese-saffron-recipe-hero-01-QiAi2-cf51438c42e247b885b06ff96abe1427.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/uplXsgBG7V6fZpXZLB0S8CyYrD0=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/risotto-alla-milanese-saffron-recipe-hero-01-QiAi2-cf51438c42e247b885b06ff96abe1427.jpg"
+    ]
+  },
+  "tiramisu": {
+    "sourceUrl": "https://www.seriouseats.com/best-tiramisu-recipe",
+    "source": "recipe-hero-fallback",
+    "stepImageUrls": [
+      "https://www.seriouseats.com/thmb/HncE0br_VU8SOOEVn0MHoNDt4lk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2017__06__20170526-tiramisu-vicky-wasik-41-00531445710a4dfa83ffc7d3a65abb12.jpg"
+    ],
+    "stepImageThumbUrls": [
+      "https://www.seriouseats.com/thmb/HncE0br_VU8SOOEVn0MHoNDt4lk=/480x320/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__2017__06__20170526-tiramisu-vicky-wasik-41-00531445710a4dfa83ffc7d3a65abb12.jpg"
+    ]
+  }
+}
