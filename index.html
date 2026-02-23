@@ -3,13 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Line | Guided Cooking</title>
+    <title>The Line: Guided Cooking</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="top-bar">
-      <h1>The Line</h1>
-      <p>No fluff. Sharp knife. Hot pan. Stay on the line.</p>
+      <div class="top-bar-inner">
+        <h1>The Line: Guided Cooking</h1>
+        <div class="theme-toggle" role="group" aria-label="Theme mode switch">
+          <button
+            id="theme-day"
+            class="theme-toggle-btn"
+            type="button"
+            aria-pressed="true"
+          >
+            Day
+          </button>
+          <button
+            id="theme-night"
+            class="theme-toggle-btn"
+            type="button"
+            aria-pressed="false"
+          >
+            Night
+          </button>
+        </div>
+      </div>
     </header>
     <main id="app" class="app-shell" aria-live="polite"></main>
     <script type="module" src="./app.js"></script>

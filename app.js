@@ -1,7 +1,65 @@
 import { RECIPES } from "./data/recipes.js";
 
 const app = document.querySelector("#app");
+const themeDayButton = document.querySelector("#theme-day");
+const themeNightButton = document.querySelector("#theme-night");
 const recipeById = new Map(RECIPES.map((recipe) => [recipe.id, recipe]));
+
+const THEME_STORAGE_KEY = "the-line-theme";
+const THEME_OPTION_SET = new Set(["day", "night"]);
+
+const getSavedTheme = () => {
+  if (typeof window === "undefined") {
+    return "day";
+  }
+  try {
+    const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return THEME_OPTION_SET.has(saved) ? saved : "day";
+  } catch {
+    return "day";
+  }
+};
+
+const syncThemeButtons = (theme) => {
+  if (themeDayButton) {
+    const isDay = theme === "day";
+    themeDayButton.classList.toggle("is-active", isDay);
+    themeDayButton.setAttribute("aria-pressed", isDay ? "true" : "false");
+  }
+  if (themeNightButton) {
+    const isNight = theme === "night";
+    themeNightButton.classList.toggle("is-active", isNight);
+    themeNightButton.setAttribute("aria-pressed", isNight ? "true" : "false");
+  }
+};
+
+const applyTheme = (nextTheme, persist = true) => {
+  const safeTheme = THEME_OPTION_SET.has(nextTheme) ? nextTheme : "day";
+  document.documentElement.dataset.theme = safeTheme;
+  syncThemeButtons(safeTheme);
+  if (!persist || typeof window === "undefined") {
+    return;
+  }
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, safeTheme);
+  } catch {
+    // No-op: keep in-memory theme only.
+  }
+};
+
+applyTheme(getSavedTheme(), false);
+
+if (themeDayButton) {
+  themeDayButton.addEventListener("click", () => {
+    applyTheme("day");
+  });
+}
+
+if (themeNightButton) {
+  themeNightButton.addEventListener("click", () => {
+    applyTheme("night");
+  });
+}
 
 const FALLBACK_IMAGE =
   "data:image/svg+xml;utf8," +
@@ -679,8 +737,6 @@ const renderCookCards = (recipe, session, animateCard) => {
   const timerProgress = session.completed
     ? 100
     : getStepTimerProgressPercent(session, recipe);
-  const currentStepImage =
-    currentStep.imageUrl ?? currentStep.imageThumbUrl ?? recipe.imageUrl;
   const status = session.completed
     ? "Completed"
     : session.paused
@@ -689,7 +745,7 @@ const renderCookCards = (recipe, session, animateCard) => {
   const statusClass = session.completed
     ? "completed"
     : session.paused
-      ? "paused"
+      ? ""
       : "running";
   const nearingAutoAdvance =
     !session.completed &&
@@ -705,41 +761,32 @@ const renderCookCards = (recipe, session, animateCard) => {
       </header>
 
       <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""} ${nearingAutoAdvance ? "ending-soon" : ""}">
-        <div class="progress-track progress-track-step" aria-hidden="true">
-          <span style="width: ${timerProgress}%"></span>
-        </div>
-
         <div class="step-topline">
           <span class="status-pill ${statusClass}">${status}</span>
           <span class="step-phase-pill">
             ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
           </span>
         </div>
-        <div class="step-media-row">
-          <div class="step-timer-stack">
-            <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
-              ${session.completed ? "00:00" : formatClock(session.remainingSec)}
-            </p>
-            ${
-              nearingAutoAdvance
-                ? `
-                  <p class="cue-note is-visible">
-                    Auto-advancing in ${session.remainingSec}s...
-                  </p>
-                `
-                : ""
-            }
-          </div>
-          <img
-            class="cook-step-image"
-            src="${escapeHtml(currentStepImage)}"
-            alt="${escapeHtml(`${recipe.name} step ${currentStepNumber}`)}"
-            loading="lazy"
-            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
-          />
+
+        <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
+          ${session.completed ? "00:00" : formatClock(session.remainingSec)}
+        </p>
+
+        <div class="progress-track progress-track-step" aria-hidden="true">
+          <span style="width: ${timerProgress}%"></span>
         </div>
+        ${
+          nearingAutoAdvance
+            ? `
+              <p class="cue-note is-visible">
+                Auto-advancing in ${session.remainingSec}s...
+              </p>
+            `
+            : ""
+        }
 
         <h3>${escapeHtml(currentStep.title)}</h3>
+
         <p class="step-detail">${escapeHtml(currentStep.detail)}</p>
         <p class="next-up">
           <strong>Next up:</strong>
@@ -881,12 +928,10 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
-    case "prev-step":
     case "card-prev": {
       shiftStepManually(-1);
       break;
     }
-    case "next-step":
     case "card-next": {
       if (!state.cookSession || !recipe) {
         return;

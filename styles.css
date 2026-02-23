@@ -4,6 +4,11 @@
   --accent: #bc002d; /* Japanese flag red */
 }
 
+:root[data-theme="night"] {
+  --bg: #000000;
+  --text: #ffffff;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -25,14 +30,49 @@ body {
   background: var(--bg);
 }
 
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
 .top-bar h1 {
   margin: 0;
   font-size: 1.4rem;
 }
 
-.top-bar p {
-  margin: 0.25rem 0 0;
-  font-size: 0.9rem;
+.theme-toggle {
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: var(--bg);
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.theme-toggle-btn {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 0.35rem 0.8rem;
+  min-width: 64px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.theme-toggle-btn + .theme-toggle-btn {
+  border-left: 2px solid var(--text);
+}
+
+.theme-toggle-btn.is-active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
 }
 
 .app-shell {
@@ -371,11 +411,6 @@ body {
   padding-left: 0.6rem;
 }
 
-.setup-grid {
-  display: grid;
-  gap: 1rem;
-}
-
 .cook-card-screen {
   display: grid;
   gap: 0.9rem;
@@ -416,14 +451,15 @@ body {
 }
 
 .progress-track-step {
-  margin-bottom: 0.1rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.15rem;
 }
 
 .step-topline {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.45rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -433,28 +469,22 @@ body {
   padding: 0.2rem 0.6rem;
   font-size: 0.8rem;
   font-weight: 700;
-}
-
-.step-media-row {
-  display: grid;
-  grid-template-columns: minmax(170px, 0.95fr) minmax(220px, 1.35fr);
-  gap: 0.9rem;
-  align-items: start;
-}
-
-.step-timer-stack {
-  display: grid;
-  gap: 0.5rem;
-  align-content: start;
+  white-space: nowrap;
 }
 
 .countdown-hero {
   margin: 0;
+  width: 100%;
   min-width: 6.2ch;
+  justify-content: center;
+  padding: 0.75rem 0.8rem;
   font-size: clamp(2.25rem, 7vw, 3.4rem);
   line-height: 1;
   font-weight: 800;
-  justify-self: start;
+}
+
+.cook-step-card h3 {
+  margin: 0;
 }
 
 .countdown-hero.is-ending {
@@ -472,16 +502,6 @@ body {
 
 .cue-note.is-visible {
   color: var(--accent);
-}
-
-.cook-step-image {
-  width: 100%;
-  min-height: 140px;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  border: 2px solid var(--text);
-  border-radius: 10px;
-  display: block;
 }
 
 .step-detail {
@@ -556,77 +576,6 @@ body {
   }
 }
 
-.portion-control {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.portion-control label {
-  font-weight: 700;
-}
-
-.portion-control input {
-  width: 90px;
-  border: 2px solid var(--text);
-  border-radius: 8px;
-  font-size: 1rem;
-  padding: 0.35rem 0.45rem;
-}
-
-.timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 0.7rem;
-  border-left: 3px solid var(--text);
-  display: grid;
-  gap: 0.8rem;
-}
-
-.timeline-step {
-  position: relative;
-  border: 2px solid var(--text);
-  border-radius: 10px;
-  padding: 0.75rem;
-  background: var(--bg);
-}
-
-.timeline-step::before {
-  content: "";
-  position: absolute;
-  left: -1.26rem;
-  top: 1rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 999px;
-  border: 2px solid var(--text);
-  background: var(--bg);
-}
-
-.timeline-step.active {
-  border-color: var(--accent);
-}
-
-.timeline-step.active::before {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-
-.timeline-step.done {
-  opacity: 0.65;
-}
-
-.timeline-step h4 {
-  margin: 0 0 0.25rem;
-}
-
-.timeline-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.85rem;
-}
-
 .countdown {
   border: 2px solid var(--accent);
   border-radius: 8px;
@@ -656,11 +605,6 @@ body {
   color: var(--bg);
 }
 
-.footer-note {
-  margin-top: 1rem;
-  font-size: 0.84rem;
-}
-
 a {
   color: var(--accent);
   font-weight: 700;
@@ -677,6 +621,19 @@ a {
     padding: 1rem 1.5rem;
   }
 
+  .top-bar-inner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .top-bar h1 {
+    font-size: 1.18rem;
+  }
+
+  .theme-toggle {
+    margin-left: auto;
+  }
+
   .app-shell {
     padding: 1rem;
   }
@@ -689,14 +646,8 @@ a {
     min-height: 340px;
   }
 
-  .step-media-row {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-  }
-
-  .cook-step-image {
-    max-height: 210px;
-    aspect-ratio: 4 / 3;
+  .step-topline {
+    align-items: flex-start;
   }
 
   .countdown-hero {
