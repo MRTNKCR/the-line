@@ -4,6 +4,11 @@
   --accent: #bc002d; /* Japanese flag red */
 }
 
+:root[data-theme="night"] {
+  --bg: #000000;
+  --text: #ffffff;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -25,14 +30,49 @@ body {
   background: var(--bg);
 }
 
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
 .top-bar h1 {
   margin: 0;
   font-size: 1.4rem;
 }
 
-.top-bar p {
-  margin: 0.25rem 0 0;
-  font-size: 0.9rem;
+.theme-toggle {
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: var(--bg);
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.theme-toggle-btn {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 0.35rem 0.8rem;
+  min-width: 64px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.theme-toggle-btn + .theme-toggle-btn {
+  border-left: 2px solid var(--text);
+}
+
+.theme-toggle-btn.is-active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
 }
 
 .app-shell {
@@ -657,6 +697,19 @@ a {
 @media (max-width: 900px) {
   .top-bar {
     padding: 1rem 1.5rem;
+  }
+
+  .top-bar-inner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .top-bar h1 {
+    font-size: 1.18rem;
+  }
+
+  .theme-toggle {
+    margin-left: auto;
   }
 
   .app-shell {
