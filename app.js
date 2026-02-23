@@ -679,18 +679,6 @@ const renderCookCards = (recipe, session, animateCard) => {
   const timerProgress = session.completed
     ? 100
     : getStepTimerProgressPercent(session, recipe);
-  const currentStepImage =
-    currentStep.imageUrl ?? currentStep.imageThumbUrl ?? recipe.imageUrl;
-  const status = session.completed
-    ? "Completed"
-    : session.paused
-      ? "Paused"
-      : "Running";
-  const statusClass = session.completed
-    ? "completed"
-    : session.paused
-      ? "paused"
-      : "running";
   const nearingAutoAdvance =
     !session.completed &&
     !session.paused &&
@@ -709,37 +697,26 @@ const renderCookCards = (recipe, session, animateCard) => {
           <span style="width: ${timerProgress}%"></span>
         </div>
 
-        <div class="step-topline">
-          <span class="status-pill ${statusClass}">${status}</span>
+        <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
+          ${session.completed ? "00:00" : formatClock(session.remainingSec)}
+        </p>
+        ${
+          nearingAutoAdvance
+            ? `
+              <p class="cue-note is-visible">
+                Auto-advancing in ${session.remainingSec}s...
+              </p>
+            `
+            : ""
+        }
+
+        <div class="step-heading-row">
+          <h3>${escapeHtml(currentStep.title)}</h3>
           <span class="step-phase-pill">
             ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
           </span>
         </div>
-        <div class="step-media-row">
-          <div class="step-timer-stack">
-            <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
-              ${session.completed ? "00:00" : formatClock(session.remainingSec)}
-            </p>
-            ${
-              nearingAutoAdvance
-                ? `
-                  <p class="cue-note is-visible">
-                    Auto-advancing in ${session.remainingSec}s...
-                  </p>
-                `
-                : ""
-            }
-          </div>
-          <img
-            class="cook-step-image"
-            src="${escapeHtml(currentStepImage)}"
-            alt="${escapeHtml(`${recipe.name} step ${currentStepNumber}`)}"
-            loading="lazy"
-            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"
-          />
-        </div>
 
-        <h3>${escapeHtml(currentStep.title)}</h3>
         <p class="step-detail">${escapeHtml(currentStep.detail)}</p>
         <p class="next-up">
           <strong>Next up:</strong>
