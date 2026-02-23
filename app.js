@@ -763,18 +763,18 @@ const renderCookCards = (recipe, session, animateCard) => {
             Previous
           </button>
           <button
-            class="button"
-            data-action="toggle-pause"
-            ${session.completed ? "disabled" : ""}
-          >
-            ${session.paused ? "Resume timer" : "Pause timer"}
-          </button>
-          <button
             class="button button-primary"
             data-action="card-next"
             ${session.completed ? "disabled" : ""}
           >
             Next
+          </button>
+          <button
+            class="button"
+            data-action="toggle-pause"
+            ${session.completed ? "disabled" : ""}
+          >
+            ${session.paused ? "Resume timer" : "Pause timer"}
           </button>
           <button class="button" data-action="restart-cooking">Restart</button>
         </div>
