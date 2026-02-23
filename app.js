@@ -928,12 +928,10 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
-    case "prev-step":
     case "card-prev": {
       shiftStepManually(-1);
       break;
     }
-    case "next-step":
     case "card-next": {
       if (!state.cookSession || !recipe) {
         return;

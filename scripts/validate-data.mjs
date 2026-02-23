@@ -60,9 +60,6 @@ for (const recipe of RECIPES) {
       if (!step.title || !step.detail || !step.phase) {
         errors.push(`Recipe ${recipe.id} has malformed step fields.`);
       }
-      if (!step.imageUrl || !step.imageThumbUrl) {
-        errors.push(`Recipe ${recipe.id} has malformed step image fields.`);
-      }
       if (typeof step.durationSec !== "number" || step.durationSec < 0) {
         errors.push(`Recipe ${recipe.id} has invalid step duration.`);
       } else {

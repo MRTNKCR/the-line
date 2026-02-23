@@ -411,11 +411,6 @@ body {
   padding-left: 0.6rem;
 }
 
-.setup-grid {
-  display: grid;
-  gap: 1rem;
-}
-
 .cook-card-screen {
   display: grid;
   gap: 0.9rem;
@@ -581,77 +576,6 @@ body {
   }
 }
 
-.portion-control {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.portion-control label {
-  font-weight: 700;
-}
-
-.portion-control input {
-  width: 90px;
-  border: 2px solid var(--text);
-  border-radius: 8px;
-  font-size: 1rem;
-  padding: 0.35rem 0.45rem;
-}
-
-.timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 0.7rem;
-  border-left: 3px solid var(--text);
-  display: grid;
-  gap: 0.8rem;
-}
-
-.timeline-step {
-  position: relative;
-  border: 2px solid var(--text);
-  border-radius: 10px;
-  padding: 0.75rem;
-  background: var(--bg);
-}
-
-.timeline-step::before {
-  content: "";
-  position: absolute;
-  left: -1.26rem;
-  top: 1rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 999px;
-  border: 2px solid var(--text);
-  background: var(--bg);
-}
-
-.timeline-step.active {
-  border-color: var(--accent);
-}
-
-.timeline-step.active::before {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-
-.timeline-step.done {
-  opacity: 0.65;
-}
-
-.timeline-step h4 {
-  margin: 0 0 0.25rem;
-}
-
-.timeline-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.85rem;
-}
-
 .countdown {
   border: 2px solid var(--accent);
   border-radius: 8px;
@@ -679,11 +603,6 @@ body {
   border-color: var(--accent);
   background: var(--accent);
   color: var(--bg);
-}
-
-.footer-note {
-  margin-top: 1rem;
-  font-size: 0.84rem;
 }
 
 a {
