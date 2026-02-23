@@ -2,6 +2,7 @@ import { SERIOUS_EATS_OVERRIDES } from "./serious-eats-overrides.js";
 import { SERIOUS_EATS_CONTENT } from "./serious-eats-content.js";
 import { CURATED_CHEF_STEPS } from "./curated-chef-steps.js";
 import { SERIOUS_EATS_IMAGES } from "./serious-eats-images.js";
+import { SERIOUS_EATS_STEP_IMAGES } from "./serious-eats-step-images.js";
 
 export const JAPAN_FLAG_RED = "#bc002d";
 
@@ -1627,6 +1628,46 @@ const materializeSteps = (seed, drafts) =>
     durationSec: Math.max(0, Math.round(step.durationMin ?? 1)) * 60,
   }));
 
+const sanitizeImageUrlList = (value) =>
+  (Array.isArray(value) ? value : []).filter(
+    (candidate) => typeof candidate === "string" && candidate.trim().length > 0
+  );
+
+const attachStepImages = (
+  steps,
+  stepImageMeta,
+  fallbackImageUrl,
+  fallbackImageThumbUrl
+) => {
+  const imageUrls = sanitizeImageUrlList(stepImageMeta?.stepImageUrls);
+  const thumbUrls = sanitizeImageUrlList(stepImageMeta?.stepImageThumbUrls);
+  const finalFallbackImage = fallbackImageUrl ?? fallbackImageThumbUrl;
+  const finalFallbackThumb = fallbackImageThumbUrl ?? finalFallbackImage;
+
+  if (steps.length === 0) {
+    return steps;
+  }
+
+  return steps.map((step, index) => {
+    const imageIndex = index === 0 ? 0 : index - 1;
+    const imageUrl =
+      imageUrls[imageIndex] ??
+      imageUrls[imageUrls.length - 1] ??
+      finalFallbackImage;
+    const imageThumbUrl =
+      thumbUrls[imageIndex] ??
+      thumbUrls[thumbUrls.length - 1] ??
+      imageUrl ??
+      finalFallbackThumb;
+
+    return {
+      ...step,
+      imageUrl,
+      imageThumbUrl,
+    };
+  });
+};
+
 const capTimedSteps = (seed, steps, maxSteps = 20) => {
   if (steps.length <= maxSteps) {
     return steps;
@@ -1762,6 +1803,13 @@ const toRecipe = (seed) => {
   const instructionsSource =
     curatedDrafts.length > 0 ? "chef-curated-top10" : "serious-eats-scraped";
   const scrapedImage = SERIOUS_EATS_IMAGES[seed.id] ?? null;
+  const scrapedStepImages = SERIOUS_EATS_STEP_IMAGES[seed.id] ?? null;
+  const recipeImageUrl =
+    scrapedImage?.imageUrl ??
+    `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`;
+  const recipeImageThumbUrl =
+    scrapedImage?.imageThumbUrl ??
+    `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`;
   const detailedDrafts = ensureMinimumStepCount(
     seed,
     ensureCoverage(sourceDrafts, scrapedTimings ?? { prep: 0, rest: 0, cook: 0 })
@@ -1777,7 +1825,12 @@ const toRecipe = (seed) => {
   const retimedSteps = scrapedTimings
     ? retimeStepsToMatchTimings(baseSteps, scrapedTimings)
     : baseSteps;
-  const steps = capTimedSteps(seed, retimedSteps);
+  const steps = attachStepImages(
+    capTimedSteps(seed, retimedSteps),
+    scrapedStepImages,
+    recipeImageUrl,
+    recipeImageThumbUrl
+  );
   const timings = scrapedTimings ?? deriveTimingsFromSteps(steps);
 
   return {
@@ -1796,12 +1849,8 @@ const toRecipe = (seed) => {
     sourceNote: scraped?.note ?? null,
     instructionsSource,
     recipeYield: scraped?.recipeYield ?? null,
-    imageUrl:
-      scrapedImage?.imageUrl ??
-      `https://source.unsplash.com/960x640/?${encodeURIComponent(seed.imageQuery)}`,
-    imageThumbUrl:
-      scrapedImage?.imageThumbUrl ??
-      `https://source.unsplash.com/480x320/?${encodeURIComponent(seed.imageQuery)}`,
+    imageUrl: recipeImageUrl,
+    imageThumbUrl: recipeImageThumbUrl,
     imageSource:
       scrapedImage?.sourceUrl ?? `https://source.unsplash.com/?${encodeURIComponent(seed.imageQuery)}`,
     timings,
