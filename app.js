@@ -367,18 +367,6 @@ const getFilteredRecipes = () =>
     return cuisinePass && timePass && ingredientPass;
   });
 
-const getActiveFilterCount = () => {
-  let count = 0;
-  if (state.filters.cuisine !== "all") {
-    count += 1;
-  }
-  if (state.filters.timeBucket !== "all") {
-    count += 1;
-  }
-  count += state.filters.ingredientIds.length;
-  return count;
-};
-
 const renderHome = () => {
   const filteredRecipes = getFilteredRecipes();
   const filteredIngredientOptions = getFilteredIngredientOptions();
@@ -387,7 +375,6 @@ const renderHome = () => {
     .filter(Boolean);
   const isMobile = isMobileViewport();
   const filtersCollapsed = isMobile && !state.filtersPanelOpen;
-  const activeFilterCount = getActiveFilterCount();
   const hasActiveFilters =
     state.filters.cuisine !== "all" ||
     state.filters.timeBucket !== "all" ||
@@ -421,13 +408,6 @@ const renderHome = () => {
             ${
               filtersCollapsed
                 ? `
-                  <p class="muted">
-                    ${
-                      activeFilterCount === 0
-                        ? "Filters are hidden."
-                        : `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}.`
-                    }
-                  </p>
                   ${
                     hasActiveFilters
                       ? `
