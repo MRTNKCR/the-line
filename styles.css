@@ -154,6 +154,22 @@ body {
   margin: 0 0 0.75rem;
 }
 
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.filter-toggle {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.filters-body.is-collapsed {
+  display: none;
+}
+
 .home-screen {
   display: grid;
   gap: 0.8rem;
@@ -547,5 +563,14 @@ a {
 
   .home-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 901px) {
+  .home-sidebar .filter-panel {
+    position: sticky;
+    top: 92px;
+    max-height: calc(100vh - 104px);
+    overflow-y: auto;
   }
 }

@@ -9,10 +9,16 @@ const FALLBACK_IMAGE =
     '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640"><rect width="100%" height="100%" fill="white"/><rect x="24" y="24" width="912" height="592" fill="none" stroke="black" stroke-width="8"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-size="42" font-family="Arial">Dish photo</text></svg>'
   );
 
+const MOBILE_FILTER_BREAKPOINT = 900;
+const isMobileViewport = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia(`(max-width: ${MOBILE_FILTER_BREAKPOINT}px)`).matches;
+
 const state = {
   screen: "home", // home | detail | cook-cards
   selectedRecipeId: null,
   cookSession: null,
+  filtersPanelOpen: !isMobileViewport(),
   filters: {
     cuisine: "all",
     timeBucket: "all",
@@ -361,12 +367,27 @@ const getFilteredRecipes = () =>
     return cuisinePass && timePass && ingredientPass;
   });
 
+const getActiveFilterCount = () => {
+  let count = 0;
+  if (state.filters.cuisine !== "all") {
+    count += 1;
+  }
+  if (state.filters.timeBucket !== "all") {
+    count += 1;
+  }
+  count += state.filters.ingredientIds.length;
+  return count;
+};
+
 const renderHome = () => {
   const filteredRecipes = getFilteredRecipes();
   const filteredIngredientOptions = getFilteredIngredientOptions();
   const selectedIngredients = state.filters.ingredientIds
     .map((id) => ingredientOptionMap.get(id))
     .filter(Boolean);
+  const isMobile = isMobileViewport();
+  const filtersCollapsed = isMobile && !state.filtersPanelOpen;
+  const activeFilterCount = getActiveFilterCount();
   const hasActiveFilters =
     state.filters.cuisine !== "all" ||
     state.filters.timeBucket !== "all" ||
@@ -384,111 +405,150 @@ const renderHome = () => {
       <div class="home-layout">
         <aside class="home-sidebar">
           <section class="panel filter-panel">
-            <h3>Filters</h3>
-            <div class="filters-grid">
-              <div class="filter-field">
-                <label for="cuisine-filter">Type of cuisine</label>
-                <select id="cuisine-filter" data-action="filter-cuisine">
-                  <option value="all">All cuisines</option>
-                  ${CUISINE_OPTIONS.map(
-                    (cuisine) => `
-                      <option
-                        value="${escapeHtml(cuisine)}"
-                        ${state.filters.cuisine === cuisine ? "selected" : ""}
-                      >
-                        ${escapeHtml(cuisine)}
-                      </option>
-                    `
-                  ).join("")}
-                </select>
-              </div>
-
-              <div class="filter-field">
-                <label for="time-filter">Cooking time</label>
-                <select id="time-filter" data-action="filter-time">
-                  ${TIME_BUCKET_OPTIONS.map(
-                    (bucket) => `
-                      <option
-                        value="${bucket.id}"
-                        ${state.filters.timeBucket === bucket.id ? "selected" : ""}
-                      >
-                        ${bucket.label}
-                      </option>
-                    `
-                  ).join("")}
-                </select>
-              </div>
-
-              <div class="filter-field">
-                <label for="ingredient-filter-search">Ingredients (multi-select)</label>
-                <input
-                  id="ingredient-filter-search"
-                  class="ingredient-search-input"
-                  type="search"
-                  placeholder="Search ingredients (e.g. flour, basil, tomatoes)"
-                  data-action="filter-ingredient-search"
-                  value="${escapeHtml(state.filters.ingredientQuery)}"
-                />
-                ${
-                  selectedIngredients.length > 0
-                    ? `
-                      <div class="ingredient-chip-wrap">
-                        ${selectedIngredients
-                          .map(
-                            (option) => `
-                              <button
-                                class="ingredient-chip"
-                                data-action="remove-ingredient"
-                                data-id="${escapeHtml(option.id)}"
-                              >
-                                ${escapeHtml(option.label)} ×
-                              </button>
-                            `
-                          )
-                          .join("")}
-                      </div>
-                    `
-                    : `<p class="muted">No ingredients selected yet.</p>`
-                }
-                <div class="ingredient-options" role="listbox" aria-label="Ingredient options">
-                  ${
-                    filteredIngredientOptions.length > 0
-                      ? filteredIngredientOptions
-                          .map(
-                            (option) => `
-                              <button
-                                class="ingredient-option ${
-                                  state.filters.ingredientIds.includes(option.id)
-                                    ? "selected"
-                                    : ""
-                                }"
-                                data-action="toggle-ingredient"
-                                data-id="${escapeHtml(option.id)}"
-                                aria-pressed="${
-                                  state.filters.ingredientIds.includes(option.id)
-                                    ? "true"
-                                    : "false"
-                                }"
-                              >
-                                ${escapeHtml(option.label)}
-                              </button>
-                            `
-                          )
-                          .join("")
-                      : `<p class="muted">No ingredient options match your search.</p>`
-                  }
-                </div>
-              </div>
+            <div class="filter-panel-header">
+              <h3>Filters</h3>
+              ${
+                isMobile
+                  ? `
+                    <button class="button filter-toggle" data-action="toggle-filters">
+                      ${state.filtersPanelOpen ? "Hide filters" : "Show filters"}
+                    </button>
+                  `
+                  : ""
+              }
             </div>
 
-            <div class="button-row">
-              <button
-                class="button"
-                data-action="clear-filters"
-                ${hasActiveFilters ? "" : "disabled"}
-              >
-                Clear filters
-              </button>
+            ${
+              filtersCollapsed
+                ? `
+                  <p class="muted">
+                    ${
+                      activeFilterCount === 0
+                        ? "Filters are hidden."
+                        : `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}.`
+                    }
+                  </p>
+                  ${
+                    hasActiveFilters
+                      ? `
+                        <div class="button-row">
+                          <button class="button" data-action="clear-filters">
+                            Clear filters
+                          </button>
+                        </div>
+                      `
+                      : ""
+                  }
+                `
+                : ""
+            }
+
+            <div class="filters-body ${filtersCollapsed ? "is-collapsed" : ""}">
+              <div class="filters-grid">
+                <div class="filter-field">
+                  <label for="cuisine-filter">Type of cuisine</label>
+                  <select id="cuisine-filter" data-action="filter-cuisine">
+                    <option value="all">All cuisines</option>
+                    ${CUISINE_OPTIONS.map(
+                      (cuisine) => `
+                        <option
+                          value="${escapeHtml(cuisine)}"
+                          ${state.filters.cuisine === cuisine ? "selected" : ""}
+                        >
+                          ${escapeHtml(cuisine)}
+                        </option>
+                      `
+                    ).join("")}
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label for="time-filter">Cooking time</label>
+                  <select id="time-filter" data-action="filter-time">
+                    ${TIME_BUCKET_OPTIONS.map(
+                      (bucket) => `
+                        <option
+                          value="${bucket.id}"
+                          ${state.filters.timeBucket === bucket.id ? "selected" : ""}
+                        >
+                          ${bucket.label}
+                        </option>
+                      `
+                    ).join("")}
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label for="ingredient-filter-search">Ingredients (multi-select)</label>
+                  <input
+                    id="ingredient-filter-search"
+                    class="ingredient-search-input"
+                    type="search"
+                    placeholder="Search ingredients (e.g. flour, basil, tomatoes)"
+                    data-action="filter-ingredient-search"
+                    value="${escapeHtml(state.filters.ingredientQuery)}"
+                  />
+                  ${
+                    selectedIngredients.length > 0
+                      ? `
+                        <div class="ingredient-chip-wrap">
+                          ${selectedIngredients
+                            .map(
+                              (option) => `
+                                <button
+                                  class="ingredient-chip"
+                                  data-action="remove-ingredient"
+                                  data-id="${escapeHtml(option.id)}"
+                                >
+                                  ${escapeHtml(option.label)} ×
+                                </button>
+                              `
+                            )
+                            .join("")}
+                        </div>
+                      `
+                      : `<p class="muted">No ingredients selected yet.</p>`
+                  }
+                  <div class="ingredient-options" role="listbox" aria-label="Ingredient options">
+                    ${
+                      filteredIngredientOptions.length > 0
+                        ? filteredIngredientOptions
+                            .map(
+                              (option) => `
+                                <button
+                                  class="ingredient-option ${
+                                    state.filters.ingredientIds.includes(option.id)
+                                      ? "selected"
+                                      : ""
+                                  }"
+                                  data-action="toggle-ingredient"
+                                  data-id="${escapeHtml(option.id)}"
+                                  aria-pressed="${
+                                    state.filters.ingredientIds.includes(option.id)
+                                      ? "true"
+                                      : "false"
+                                  }"
+                                >
+                                  ${escapeHtml(option.label)}
+                                </button>
+                              `
+                            )
+                            .join("")
+                        : `<p class="muted">No ingredient options match your search.</p>`
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div class="button-row">
+                <button
+                  class="button"
+                  data-action="clear-filters"
+                  ${hasActiveFilters ? "" : "disabled"}
+                >
+                  Clear filters
+                </button>
+              </div>
             </div>
           </section>
         </aside>
@@ -879,6 +939,11 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
+    case "toggle-filters": {
+      state.filtersPanelOpen = !state.filtersPanelOpen;
+      render();
+      break;
+    }
     default:
       break;
   }
@@ -922,6 +987,19 @@ app.addEventListener("input", (event) => {
   if (nextInput) {
     nextInput.focus();
     nextInput.setSelectionRange(nextValue.length, nextValue.length);
+  }
+});
+
+let wasMobileViewport = isMobileViewport();
+window.addEventListener("resize", () => {
+  const isMobile = isMobileViewport();
+  if (isMobile === wasMobileViewport) {
+    return;
+  }
+  wasMobileViewport = isMobile;
+  state.filtersPanelOpen = !isMobile;
+  if (state.screen === "home") {
+    render();
   }
 });
 
