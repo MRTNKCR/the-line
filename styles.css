@@ -381,46 +381,6 @@ body {
   gap: 0.9rem;
 }
 
-.cook-overall-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.55rem;
-  flex-wrap: wrap;
-}
-
-.cook-overall-copy {
-  margin: 0;
-}
-
-.step-marker-row {
-  margin-top: 0.55rem;
-  display: flex;
-  align-items: center;
-  gap: 0.28rem;
-  overflow-x: auto;
-  padding-bottom: 0.1rem;
-}
-
-.step-marker {
-  flex: 0 0 12px;
-  height: 10px;
-  border: 2px solid var(--text);
-  border-radius: 999px;
-  background: var(--bg);
-}
-
-.step-marker.done {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-
-.step-marker.active {
-  border-color: var(--accent);
-  background: var(--bg);
-  flex-basis: 18px;
-}
-
 .progress-track {
   width: 100%;
   height: 12px;
@@ -471,14 +431,6 @@ body {
   font-weight: 700;
 }
 
-.timer-label {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
 .countdown-hero {
   margin: 0;
   min-width: 6.7ch;
@@ -502,10 +454,6 @@ body {
 
 .cue-note.is-visible {
   color: var(--accent);
-}
-
-.step-progress-label {
-  margin-top: -0.15rem;
 }
 
 .step-detail {
@@ -541,10 +489,6 @@ body {
 .tap-zone:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: -3px;
-}
-
-.tap-hint {
-  margin-top: 0.25rem;
 }
 
 .cook-controls-bar {
@@ -713,11 +657,6 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .cook-overall-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .cook-step-card {
     min-height: 340px;
   }
@@ -736,6 +675,22 @@ a {
 }
 
 @media (min-width: 901px) {
+  .cook-controls-row .button:nth-child(1) {
+    order: 1;
+  }
+
+  .cook-controls-row .button:nth-child(4) {
+    order: 2;
+  }
+
+  .cook-controls-row .button:nth-child(3) {
+    order: 3;
+  }
+
+  .cook-controls-row .button:nth-child(2) {
+    order: 4;
+  }
+
   .home-sidebar .filter-panel {
     position: sticky;
     top: 92px;

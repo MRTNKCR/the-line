@@ -269,24 +269,6 @@ const shiftStepManually = (delta) => {
   render();
 };
 
-const getCompletedStepCount = (session) => {
-  if (!session) {
-    return 0;
-  }
-  return Math.max(0, session.stepIndex);
-};
-
-const getOverallProgressPercent = (session, recipe) => {
-  if (!session || !recipe || recipe.steps.length === 0) {
-    return 0;
-  }
-  if (session.completed) {
-    return 100;
-  }
-  const completed = getCompletedStepCount(session);
-  return Math.max(0, Math.min(100, Math.round((completed / recipe.steps.length) * 100)));
-};
-
 const getStepTimerProgressPercent = (session, recipe) => {
   if (!session || !recipe) {
     return 0;
@@ -694,10 +676,6 @@ const renderCookCards = (recipe, session, animateCard) => {
       : null;
   const totalSteps = recipe.steps.length;
   const currentStepNumber = Math.min(session.stepIndex + 1, totalSteps);
-  const completedSteps = session.completed
-    ? totalSteps
-    : getCompletedStepCount(session);
-  const overallProgress = getOverallProgressPercent(session, recipe);
   const timerProgress = session.completed
     ? 100
     : getStepTimerProgressPercent(session, recipe);
@@ -716,24 +694,6 @@ const renderCookCards = (recipe, session, animateCard) => {
     !session.paused &&
     session.remainingSec > 0 &&
     session.remainingSec <= 3;
-  const cueText = session.completed
-    ? "Flow complete."
-    : session.paused
-      ? "Timer paused."
-      : nearingAutoAdvance
-        ? `Auto-advancing in ${session.remainingSec}s...`
-        : "Timer running.";
-  const stepMarkers = recipe.steps
-    .map((_, index) => {
-      const markerClass =
-        session.completed || index < session.stepIndex
-          ? "done"
-          : index === session.stepIndex
-            ? "active"
-            : "upcoming";
-      return `<span class="step-marker ${markerClass}"></span>`;
-    })
-    .join("");
 
   return `
     <section class="cook-card-screen">
@@ -742,21 +702,6 @@ const renderCookCards = (recipe, session, animateCard) => {
         <h2 class="screen-title">${escapeHtml(recipe.name)} • Step ${currentStepNumber}/${totalSteps}</h2>
       </header>
 
-      <section class="panel cook-overall-progress">
-        <div class="cook-overall-row">
-          <p class="cook-overall-copy">
-            <strong>${completedSteps} / ${totalSteps}</strong> steps completed
-          </p>
-          <p class="muted">Overall flow progress: ${overallProgress}%</p>
-        </div>
-        <div class="progress-track progress-track-overall" aria-hidden="true">
-          <span style="width: ${overallProgress}%"></span>
-        </div>
-        <div class="step-marker-row" aria-hidden="true">
-          ${stepMarkers}
-        </div>
-      </section>
-
       <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""} ${nearingAutoAdvance ? "ending-soon" : ""}">
         <div class="step-topline">
           <span class="status-pill ${statusClass}">${status}</span>
@@ -764,19 +709,22 @@ const renderCookCards = (recipe, session, animateCard) => {
             ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
           </span>
         </div>
-
-        <p class="timer-label">Time left</p>
         <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
           ${session.completed ? "00:00" : formatClock(session.remainingSec)}
         </p>
-        <p class="cue-note ${nearingAutoAdvance ? "is-visible" : ""}">
-          ${escapeHtml(cueText)}
-        </p>
+        ${
+          nearingAutoAdvance
+            ? `
+              <p class="cue-note is-visible">
+                Auto-advancing in ${session.remainingSec}s...
+              </p>
+            `
+            : ""
+        }
 
         <div class="progress-track progress-track-step" aria-hidden="true">
           <span style="width: ${timerProgress}%"></span>
         </div>
-        <p class="muted step-progress-label">${timerProgress}% of this step elapsed</p>
 
         <h3>${escapeHtml(currentStep.title)}</h3>
         <p class="step-detail">${escapeHtml(currentStep.detail)}</p>
@@ -788,7 +736,6 @@ const renderCookCards = (recipe, session, animateCard) => {
               : "You are on the final step."
           }
         </p>
-        <p class="muted tap-hint">Tap left half for previous step, right half for next step.</p>
 
         <div class="card-tap-grid" aria-hidden="false">
           <button
@@ -816,18 +763,18 @@ const renderCookCards = (recipe, session, animateCard) => {
             Previous
           </button>
           <button
-            class="button"
-            data-action="toggle-pause"
-            ${session.completed ? "disabled" : ""}
-          >
-            ${session.paused ? "Resume timer" : "Pause timer"}
-          </button>
-          <button
             class="button button-primary"
             data-action="card-next"
             ${session.completed ? "disabled" : ""}
           >
             Next
+          </button>
+          <button
+            class="button"
+            data-action="toggle-pause"
+            ${session.completed ? "disabled" : ""}
+          >
+            ${session.paused ? "Resume timer" : "Pause timer"}
           </button>
           <button class="button" data-action="restart-cooking">Restart</button>
         </div>
