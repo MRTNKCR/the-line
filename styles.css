@@ -225,6 +225,27 @@ body {
   margin-top: 0;
 }
 
+.detail-steps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.detail-steps-list li {
+  border-left: 4px solid var(--accent);
+  padding-left: 0.65rem;
+}
+
+.detail-steps-list h4 {
+  margin: 0 0 0.3rem;
+}
+
+.detail-steps-list p {
+  margin: 0.2rem 0 0;
+}
+
 .time-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr));
@@ -258,6 +279,88 @@ body {
 .setup-grid {
   display: grid;
   gap: 1rem;
+}
+
+.cook-card-screen {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.cook-overall-progress p {
+  margin-bottom: 0.5rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 12px;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.progress-track span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.35s ease;
+}
+
+.cook-step-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+
+.cook-step-card > *:not(.card-tap-grid) {
+  position: relative;
+  z-index: 2;
+}
+
+.card-tap-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.tap-zone {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tap-zone:disabled {
+  cursor: not-allowed;
+}
+
+.tap-zone:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.tap-hint {
+  margin-top: 0.25rem;
+}
+
+.card-wipe-in {
+  animation: cardWipeIn 220ms ease;
+}
+
+@keyframes cardWipeIn {
+  from {
+    transform: translateX(18px);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .portion-control {

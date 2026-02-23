@@ -10,9 +10,8 @@ const FALLBACK_IMAGE =
   );
 
 const state = {
-  screen: "home", // home | detail | setup | cooking
+  screen: "home", // home | detail | cook-cards
   selectedRecipeId: null,
-  portions: 4,
   cookSession: null,
   filters: {
     cuisine: "all",
@@ -98,12 +97,6 @@ const getSelectedRecipe = () => {
   return recipeById.get(state.selectedRecipeId) ?? null;
 };
 
-const scaleIngredients = (recipe, portions) =>
-  recipe.ingredients.map((ingredient) => ({
-    ...ingredient,
-    scaledAmount: (ingredient.amount * portions) / recipe.basePortions,
-  }));
-
 const stopTicker = () => {
   if (!ticker) {
     return;
@@ -142,7 +135,7 @@ const ensureTicker = () => {
   }
   ticker = setInterval(() => {
     const session = state.cookSession;
-    if (!session || state.screen !== "cooking" || session.paused || session.completed) {
+    if (!session || state.screen !== "cook-cards" || session.paused || session.completed) {
       return;
     }
 
@@ -167,17 +160,16 @@ const ensureTicker = () => {
   }, 1000);
 };
 
-const beginCookSession = (recipe, portions) => {
+const beginCookSession = (recipe) => {
   state.cookSession = {
     recipeId: recipe.id,
-    portions,
     stepIndex: 0,
     remainingSec: recipe.steps[0].durationSec,
     paused: false,
     completed: false,
   };
   syncSessionToNonZeroStep(state.cookSession, recipe);
-  state.screen = "cooking";
+  state.screen = "cook-cards";
   ensureTicker();
   render();
 };
@@ -202,6 +194,36 @@ const shiftStepManually = (delta) => {
   session.completed = false;
   syncSessionToNonZeroStep(session, recipe);
   render();
+};
+
+const getCompletedStepCount = (session) => {
+  if (!session) {
+    return 0;
+  }
+  return Math.max(0, session.stepIndex);
+};
+
+const getOverallProgressPercent = (session, recipe) => {
+  if (!session || !recipe || recipe.steps.length === 0) {
+    return 0;
+  }
+  if (session.completed) {
+    return 100;
+  }
+  const completed = getCompletedStepCount(session);
+  return Math.max(0, Math.min(100, Math.round((completed / recipe.steps.length) * 100)));
+};
+
+const getStepTimerProgressPercent = (session, recipe) => {
+  if (!session || !recipe) {
+    return 0;
+  }
+  const current = recipe.steps[session.stepIndex];
+  if (!current || current.durationSec <= 0) {
+    return 100;
+  }
+  const elapsed = current.durationSec - session.remainingSec;
+  return Math.max(0, Math.min(100, Math.round((elapsed / current.durationSec) * 100)));
 };
 
 const matchesTimeBucket = (totalTimeMin, bucketId) => {
@@ -417,135 +439,104 @@ const renderDetail = (recipe) => `
       </ul>
     </section>
 
+    <section class="panel">
+      <h3>Full cooking timeline (${recipe.steps.length} steps)</h3>
+      <ol class="detail-steps-list">
+        ${recipe.steps
+          .map(
+            (step, index) => `
+              <li>
+                <h4>${index + 1}. ${escapeHtml(step.title)}</h4>
+                <p>${escapeHtml(step.detail)}</p>
+                <p class="muted">Phase: ${escapeHtml(step.phase)} • Duration: ${step.durationMin} min</p>
+              </li>
+            `
+          )
+          .join("")}
+      </ol>
+    </section>
+
     <div class="button-row">
       <button class="button" data-action="back-home">Back to home</button>
-      <button class="button button-primary" data-action="to-setup">Cook this dish</button>
+      <button class="button button-primary" data-action="start-cards">Cook this dish</button>
     </div>
   </article>
 `;
 
-const renderSetup = (recipe) => {
-  const scaledIngredients = scaleIngredients(recipe, state.portions);
-
-  return `
-    <section class="setup-grid">
-      <header class="screen-header">
-        <button class="button" data-action="back-detail">Back to recipe</button>
-        <h2 class="screen-title">Prepare: ${escapeHtml(recipe.name)}</h2>
-      </header>
-
-      <section class="panel">
-        <h3>1) Select portions</h3>
-        <div class="portion-control">
-          <label for="portion-input">Portions</label>
-          <input
-            id="portion-input"
-            type="number"
-            min="1"
-            max="20"
-            step="1"
-            value="${state.portions}"
-            data-action="change-portions"
-          />
-        </div>
-      </section>
-
-      <section class="panel">
-        <h3>2) Ingredients for ${state.portions} portions (metric)</h3>
-        <ul class="ingredients-list">
-          ${scaledIngredients
-            .map(
-              (ingredient) => `
-                <li>${formatAmount(ingredient.scaledAmount, ingredient.unit)} ${escapeHtml(ingredient.name)}</li>
-              `
-            )
-            .join("")}
-        </ul>
-      </section>
-
-      <div class="button-row">
-        <button class="button button-primary" data-action="start-cooking">Cook now</button>
-      </div>
-    </section>
-  `;
-};
-
-const renderCooking = (recipe, session) => {
+const renderCookCards = (recipe, session, animateCard) => {
   const currentStep = recipe.steps[session.stepIndex];
+  const totalSteps = recipe.steps.length;
+  const completedSteps = session.completed
+    ? totalSteps
+    : getCompletedStepCount(session);
+  const overallProgress = getOverallProgressPercent(session, recipe);
+  const timerProgress = session.completed
+    ? 100
+    : getStepTimerProgressPercent(session, recipe);
   const status = session.completed
     ? "Completed"
     : session.paused
-      ? "Paused (manual mode)"
-      : "Running (auto mode)";
+      ? "Paused"
+      : "Running";
 
   return `
-    <section class="setup-grid">
+    <section class="cook-card-screen">
       <header class="screen-header">
-        <button class="button" data-action="exit-cooking">Exit cooking</button>
-        <h2 class="screen-title">${escapeHtml(recipe.name)} • step ${session.stepIndex + 1}/${recipe.steps.length}</h2>
+        <button class="button" data-action="exit-cooking">Back to recipe</button>
+        <h2 class="screen-title">${escapeHtml(recipe.name)} • Step ${Math.min(session.stepIndex + 1, totalSteps)}/${totalSteps}</h2>
       </header>
 
-      <section class="panel">
+      <section class="panel cook-overall-progress">
+        <p class="muted">
+          <strong>${completedSteps} / ${totalSteps}</strong> steps completed
+        </p>
+        <div class="progress-track" aria-hidden="true">
+          <span style="width: ${overallProgress}%"></span>
+        </div>
+      </section>
+
+      <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""}">
         <div class="button-row">
           <span class="status-pill ${session.paused ? "" : "running"}">${status}</span>
-          <span class="countdown">Time left: ${formatClock(session.remainingSec)}</span>
+          <span class="countdown">Time left: ${session.completed ? "00:00" : formatClock(session.remainingSec)}</span>
         </div>
         <h3>${escapeHtml(currentStep.title)}</h3>
         <p>${escapeHtml(currentStep.detail)}</p>
-        <p class="muted">
-          Phase: ${escapeHtml(currentStep.phase)} • Planned duration: ${currentStep.durationMin} min
-        </p>
+        <p class="muted">Phase: ${escapeHtml(currentStep.phase)} • Planned duration: ${currentStep.durationMin} min</p>
+
+        <div class="progress-track" aria-hidden="true">
+          <span style="width: ${timerProgress}%"></span>
+        </div>
+        <p class="muted tap-hint">Tap left half for previous step, right half for next step.</p>
+
+        <div class="card-tap-grid" aria-hidden="false">
+          <button
+            class="tap-zone"
+            data-action="card-prev"
+            aria-label="Go to previous step"
+            ${session.stepIndex === 0 ? "disabled" : ""}
+          ></button>
+          <button
+            class="tap-zone"
+            data-action="card-next"
+            aria-label="Go to next step"
+            ${session.completed ? "disabled" : ""}
+          ></button>
+        </div>
+      </section>
+
+      <section class="panel">
         <div class="button-row">
-          <button class="button" data-action="prev-step" ${session.stepIndex === 0 ? "disabled" : ""}>
-            Previous step
-          </button>
           <button
             class="button"
             data-action="toggle-pause"
             ${session.completed ? "disabled" : ""}
           >
-            ${session.paused ? "Resume auto flow" : "Pause auto flow"}
+            ${session.paused ? "Resume timer" : "Pause timer"}
           </button>
-          <button
-            class="button"
-            data-action="next-step"
-            ${session.stepIndex >= recipe.steps.length - 1 ? "disabled" : ""}
-          >
-            Next step
-          </button>
-          <button class="button" data-action="restart-cooking">Restart</button>
+          <button class="button" data-action="restart-cooking">Restart from step 1</button>
         </div>
       </section>
-
-      <section class="panel">
-        <h3>Vertical timeline</h3>
-        <ol class="timeline">
-          ${recipe.steps
-            .map((step, index) => {
-              const stateClass =
-                index < session.stepIndex
-                  ? "done"
-                  : index === session.stepIndex
-                    ? "active"
-                    : "";
-
-              return `
-                <li class="timeline-step ${stateClass}" data-step-item="${index}">
-                  <h4>${index + 1}. ${escapeHtml(step.title)}</h4>
-                  <p>${escapeHtml(step.detail)}</p>
-                  <div class="timeline-meta">
-                    <span>Phase: ${escapeHtml(step.phase)}</span>
-                    <span>Duration: ${step.durationMin} min</span>
-                  </div>
-                </li>
-              `;
-            })
-            .join("")}
-        </ol>
-      </section>
-      <p class="footer-note">
-        Auto flow switches steps when timer reaches zero. You can pause anytime and continue manually.
-      </p>
     </section>
   `;
 };
@@ -568,27 +559,21 @@ const render = () => {
     html = renderEmptySelection();
   } else if (state.screen === "detail") {
     html = renderDetail(recipe);
-  } else if (state.screen === "setup") {
-    html = renderSetup(recipe);
-  } else if (state.screen === "cooking") {
+  } else if (state.screen === "cook-cards") {
     const session = state.cookSession;
     if (!session || session.recipeId !== recipe.id) {
-      html = renderSetup(recipe);
-      state.screen = "setup";
+      html = renderDetail(recipe);
+      state.screen = "detail";
     } else {
-      html = renderCooking(recipe, session);
+      const animateCard = session.stepIndex !== lastRenderedActiveStep;
+      html = renderCookCards(recipe, session, animateCard);
     }
   }
 
   app.innerHTML = html;
 
-  if (state.screen === "cooking" && state.cookSession) {
-    const activeIndex = state.cookSession.stepIndex;
-    if (activeIndex !== lastRenderedActiveStep) {
-      lastRenderedActiveStep = activeIndex;
-      const activeNode = app.querySelector(`[data-step-item="${activeIndex}"]`);
-      activeNode?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+  if (state.screen === "cook-cards" && state.cookSession) {
+    lastRenderedActiveStep = state.cookSession.stepIndex;
   } else {
     lastRenderedActiveStep = -1;
   }
@@ -611,7 +596,6 @@ app.addEventListener("click", (event) => {
       }
       state.selectedRecipeId = id;
       state.screen = "detail";
-      state.portions = recipeById.get(id).basePortions;
       state.cookSession = null;
       render();
       break;
@@ -624,25 +608,11 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
-    case "to-setup": {
+    case "start-cards": {
       if (!recipe) {
         return;
       }
-      state.screen = "setup";
-      state.portions = recipe.basePortions;
-      render();
-      break;
-    }
-    case "back-detail": {
-      state.screen = "detail";
-      render();
-      break;
-    }
-    case "start-cooking": {
-      if (!recipe) {
-        return;
-      }
-      beginCookSession(recipe, state.portions);
+      beginCookSession(recipe);
       break;
     }
     case "toggle-pause": {
@@ -656,11 +626,23 @@ app.addEventListener("click", (event) => {
       render();
       break;
     }
-    case "prev-step": {
+    case "prev-step":
+    case "card-prev": {
       shiftStepManually(-1);
       break;
     }
-    case "next-step": {
+    case "next-step":
+    case "card-next": {
+      if (!state.cookSession || !recipe) {
+        return;
+      }
+      if (state.cookSession.stepIndex >= recipe.steps.length - 1) {
+        state.cookSession.completed = true;
+        state.cookSession.paused = true;
+        state.cookSession.remainingSec = 0;
+        render();
+        return;
+      }
       shiftStepManually(1);
       break;
     }
@@ -669,6 +651,7 @@ app.addEventListener("click", (event) => {
         return;
       }
       state.cookSession.stepIndex = 0;
+      state.cookSession.remainingSec = recipe.steps[0].durationSec;
       state.cookSession.paused = false;
       state.cookSession.completed = false;
       syncSessionToNonZeroStep(state.cookSession, recipe);
@@ -677,7 +660,7 @@ app.addEventListener("click", (event) => {
       break;
     }
     case "exit-cooking": {
-      state.screen = "setup";
+      state.screen = "detail";
       state.cookSession = null;
       stopTicker();
       render();
@@ -692,22 +675,6 @@ app.addEventListener("click", (event) => {
     default:
       break;
   }
-});
-
-app.addEventListener("input", (event) => {
-  const target = event.target.closest("[data-action='change-portions']");
-  if (!target) {
-    return;
-  }
-
-  const raw = Number.parseInt(target.value, 10);
-  if (Number.isNaN(raw)) {
-    return;
-  }
-
-  state.portions = Math.max(1, Math.min(20, raw));
-  target.value = state.portions;
-  render();
 });
 
 app.addEventListener("change", (event) => {
