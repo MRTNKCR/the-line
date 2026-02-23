@@ -688,7 +688,12 @@ const renderDetail = (recipe) => `
 
 const renderCookCards = (recipe, session, animateCard) => {
   const currentStep = recipe.steps[session.stepIndex];
+  const nextStep =
+    !session.completed && session.stepIndex < recipe.steps.length - 1
+      ? recipe.steps[session.stepIndex + 1]
+      : null;
   const totalSteps = recipe.steps.length;
+  const currentStepNumber = Math.min(session.stepIndex + 1, totalSteps);
   const completedSteps = session.completed
     ? totalSteps
     : getCompletedStepCount(session);
@@ -701,35 +706,88 @@ const renderCookCards = (recipe, session, animateCard) => {
     : session.paused
       ? "Paused"
       : "Running";
+  const statusClass = session.completed
+    ? "completed"
+    : session.paused
+      ? "paused"
+      : "running";
+  const nearingAutoAdvance =
+    !session.completed &&
+    !session.paused &&
+    session.remainingSec > 0 &&
+    session.remainingSec <= 3;
+  const cueText = session.completed
+    ? "Flow complete."
+    : session.paused
+      ? "Timer paused."
+      : nearingAutoAdvance
+        ? `Auto-advancing in ${session.remainingSec}s...`
+        : "Timer running.";
+  const stepMarkers = recipe.steps
+    .map((_, index) => {
+      const markerClass =
+        session.completed || index < session.stepIndex
+          ? "done"
+          : index === session.stepIndex
+            ? "active"
+            : "upcoming";
+      return `<span class="step-marker ${markerClass}"></span>`;
+    })
+    .join("");
 
   return `
     <section class="cook-card-screen">
       <header class="screen-header">
         <button class="button" data-action="exit-cooking">Back to recipe</button>
-        <h2 class="screen-title">${escapeHtml(recipe.name)} • Step ${Math.min(session.stepIndex + 1, totalSteps)}/${totalSteps}</h2>
+        <h2 class="screen-title">${escapeHtml(recipe.name)} • Step ${currentStepNumber}/${totalSteps}</h2>
       </header>
 
       <section class="panel cook-overall-progress">
-        <p class="muted">
-          <strong>${completedSteps} / ${totalSteps}</strong> steps completed
-        </p>
-        <div class="progress-track" aria-hidden="true">
+        <div class="cook-overall-row">
+          <p class="cook-overall-copy">
+            <strong>${completedSteps} / ${totalSteps}</strong> steps completed
+          </p>
+          <p class="muted">Overall flow progress: ${overallProgress}%</p>
+        </div>
+        <div class="progress-track progress-track-overall" aria-hidden="true">
           <span style="width: ${overallProgress}%"></span>
+        </div>
+        <div class="step-marker-row" aria-hidden="true">
+          ${stepMarkers}
         </div>
       </section>
 
-      <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""}">
-        <div class="button-row">
-          <span class="status-pill ${session.paused ? "" : "running"}">${status}</span>
-          <span class="countdown">Time left: ${session.completed ? "00:00" : formatClock(session.remainingSec)}</span>
+      <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""} ${nearingAutoAdvance ? "ending-soon" : ""}">
+        <div class="step-topline">
+          <span class="status-pill ${statusClass}">${status}</span>
+          <span class="step-phase-pill">
+            ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
+          </span>
         </div>
-        <h3>${escapeHtml(currentStep.title)}</h3>
-        <p>${escapeHtml(currentStep.detail)}</p>
-        <p class="muted">Phase: ${escapeHtml(currentStep.phase)} • Planned duration: ${currentStep.durationMin} min</p>
 
-        <div class="progress-track" aria-hidden="true">
+        <p class="timer-label">Time left</p>
+        <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
+          ${session.completed ? "00:00" : formatClock(session.remainingSec)}
+        </p>
+        <p class="cue-note ${nearingAutoAdvance ? "is-visible" : ""}">
+          ${escapeHtml(cueText)}
+        </p>
+
+        <div class="progress-track progress-track-step" aria-hidden="true">
           <span style="width: ${timerProgress}%"></span>
         </div>
+        <p class="muted step-progress-label">${timerProgress}% of this step elapsed</p>
+
+        <h3>${escapeHtml(currentStep.title)}</h3>
+        <p class="step-detail">${escapeHtml(currentStep.detail)}</p>
+        <p class="next-up">
+          <strong>Next up:</strong>
+          ${
+            nextStep
+              ? escapeHtml(nextStep.title)
+              : "You are on the final step."
+          }
+        </p>
         <p class="muted tap-hint">Tap left half for previous step, right half for next step.</p>
 
         <div class="card-tap-grid" aria-hidden="false">
@@ -748,8 +806,15 @@ const renderCookCards = (recipe, session, animateCard) => {
         </div>
       </section>
 
-      <section class="panel">
-        <div class="button-row">
+      <section class="panel cook-controls-bar">
+        <div class="button-row cook-controls-row">
+          <button
+            class="button"
+            data-action="card-prev"
+            ${session.stepIndex === 0 ? "disabled" : ""}
+          >
+            Previous
+          </button>
           <button
             class="button"
             data-action="toggle-pause"
@@ -757,7 +822,14 @@ const renderCookCards = (recipe, session, animateCard) => {
           >
             ${session.paused ? "Resume timer" : "Pause timer"}
           </button>
-          <button class="button" data-action="restart-cooking">Restart from step 1</button>
+          <button
+            class="button button-primary"
+            data-action="card-next"
+            ${session.completed ? "disabled" : ""}
+          >
+            Next
+          </button>
+          <button class="button" data-action="restart-cooking">Restart</button>
         </div>
       </section>
     </section>

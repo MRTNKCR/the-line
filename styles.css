@@ -381,8 +381,44 @@ body {
   gap: 0.9rem;
 }
 
-.cook-overall-progress p {
-  margin-bottom: 0.5rem;
+.cook-overall-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.cook-overall-copy {
+  margin: 0;
+}
+
+.step-marker-row {
+  margin-top: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  overflow-x: auto;
+  padding-bottom: 0.1rem;
+}
+
+.step-marker {
+  flex: 0 0 12px;
+  height: 10px;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+.step-marker.done {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.step-marker.active {
+  border-color: var(--accent);
+  background: var(--bg);
+  flex-basis: 18px;
 }
 
 .progress-track {
@@ -404,15 +440,83 @@ body {
 .cook-step-card {
   position: relative;
   overflow: hidden;
-  min-height: 320px;
+  min-height: 380px;
   display: grid;
   gap: 0.7rem;
   align-content: start;
 }
 
+.cook-step-card.ending-soon {
+  border-color: var(--accent);
+}
+
 .cook-step-card > *:not(.card-tap-grid) {
   position: relative;
   z-index: 2;
+}
+
+.step-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.step-phase-pill {
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.timer-label {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.countdown-hero {
+  margin: 0;
+  min-width: 6.7ch;
+  font-size: clamp(2.25rem, 7vw, 3.4rem);
+  line-height: 1;
+  font-weight: 800;
+}
+
+.countdown-hero.is-ending {
+  background: var(--accent);
+  color: var(--bg);
+  animation: timerPulse 0.9s ease-in-out infinite;
+}
+
+.cue-note {
+  margin: 0;
+  min-height: 1.25rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.cue-note.is-visible {
+  color: var(--accent);
+}
+
+.step-progress-label {
+  margin-top: -0.15rem;
+}
+
+.step-detail {
+  margin: 0;
+}
+
+.next-up {
+  margin: 0;
+  border-left: 4px solid var(--accent);
+  padding-left: 0.6rem;
+  font-size: 0.9rem;
 }
 
 .card-tap-grid {
@@ -443,6 +547,16 @@ body {
   margin-top: 0.25rem;
 }
 
+.cook-controls-bar {
+  position: sticky;
+  bottom: 0.5rem;
+  z-index: 7;
+}
+
+.cook-controls-row .button {
+  flex: 1 1 130px;
+}
+
 .card-wipe-in {
   animation: cardWipeIn 220ms ease;
 }
@@ -455,6 +569,18 @@ body {
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@keyframes timerPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
@@ -532,9 +658,11 @@ body {
 .countdown {
   border: 2px solid var(--accent);
   border-radius: 8px;
-  padding: 0.5rem 0.7rem;
+  padding: 0.45rem 0.7rem;
   font-weight: 700;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status-pill {
@@ -542,11 +670,18 @@ body {
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
   font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .status-pill.running {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.status-pill.completed {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .footer-note {
@@ -576,6 +711,27 @@ a {
 
   .home-layout {
     grid-template-columns: 1fr;
+  }
+
+  .cook-overall-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cook-step-card {
+    min-height: 340px;
+  }
+
+  .countdown-hero {
+    font-size: clamp(1.9rem, 13vw, 3rem);
+  }
+
+  .cook-controls-bar {
+    bottom: 0;
+  }
+
+  .cook-controls-row .button {
+    flex: 1 1 calc(50% - 0.25rem);
   }
 }
 
