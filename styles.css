@@ -675,6 +675,22 @@ a {
 }
 
 @media (min-width: 901px) {
+  .cook-controls-row .button[data-action="card-prev"] {
+    order: 1;
+  }
+
+  .cook-controls-row .button[data-action="restart-cooking"] {
+    order: 2;
+  }
+
+  .cook-controls-row .button[data-action="toggle-pause"] {
+    order: 3;
+  }
+
+  .cook-controls-row .button[data-action="card-next"] {
+    order: 4;
+  }
+
   .home-sidebar .filter-panel {
     position: sticky;
     top: 92px;
