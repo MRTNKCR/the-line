@@ -737,6 +737,16 @@ const renderCookCards = (recipe, session, animateCard) => {
   const timerProgress = session.completed
     ? 100
     : getStepTimerProgressPercent(session, recipe);
+  const status = session.completed
+    ? "Completed"
+    : session.paused
+      ? "Paused"
+      : "Running";
+  const statusClass = session.completed
+    ? "completed"
+    : session.paused
+      ? ""
+      : "running";
   const nearingAutoAdvance =
     !session.completed &&
     !session.paused &&
@@ -751,13 +761,20 @@ const renderCookCards = (recipe, session, animateCard) => {
       </header>
 
       <section class="panel cook-step-card ${animateCard ? "card-wipe-in" : ""} ${nearingAutoAdvance ? "ending-soon" : ""}">
-        <div class="progress-track progress-track-step" aria-hidden="true">
-          <span style="width: ${timerProgress}%"></span>
+        <div class="step-topline">
+          <span class="status-pill ${statusClass}">${status}</span>
+          <span class="step-phase-pill">
+            ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
+          </span>
         </div>
 
         <p class="countdown countdown-hero ${nearingAutoAdvance ? "is-ending" : ""}">
           ${session.completed ? "00:00" : formatClock(session.remainingSec)}
         </p>
+
+        <div class="progress-track progress-track-step" aria-hidden="true">
+          <span style="width: ${timerProgress}%"></span>
+        </div>
         ${
           nearingAutoAdvance
             ? `
@@ -768,12 +785,7 @@ const renderCookCards = (recipe, session, animateCard) => {
             : ""
         }
 
-        <div class="step-heading-row">
-          <h3>${escapeHtml(currentStep.title)}</h3>
-          <span class="step-phase-pill">
-            ${escapeHtml(currentStep.phase)} • ${currentStep.durationMin} min
-          </span>
-        </div>
+        <h3>${escapeHtml(currentStep.title)}</h3>
 
         <p class="step-detail">${escapeHtml(currentStep.detail)}</p>
         <p class="next-up">
