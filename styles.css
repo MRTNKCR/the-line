@@ -679,11 +679,11 @@ a {
     order: 1;
   }
 
-  .cook-controls-row .button:nth-child(4) {
+  .cook-controls-row .button:nth-child(3) {
     order: 2;
   }
 
-  .cook-controls-row .button:nth-child(3) {
+  .cook-controls-row .button:nth-child(4) {
     order: 3;
   }
 
