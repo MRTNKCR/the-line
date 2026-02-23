@@ -616,7 +616,10 @@ const renderDetail = (recipe) => `
     />
 
     <section class="panel">
-      <h2>${escapeHtml(recipe.name)}</h2>
+      <div class="overview-header">
+        <h2>${escapeHtml(recipe.name)}</h2>
+        <button class="button button-primary" data-action="start-cards">Cook this dish</button>
+      </div>
       <p>${escapeHtml(recipe.summary)}</p>
       <p>${escapeHtml(recipe.history)}</p>
       <p>
@@ -680,11 +683,6 @@ const renderDetail = (recipe) => `
           .join("")}
       </ol>
     </section>
-
-    <div class="button-row">
-      <button class="button" data-action="back-home">Back to home</button>
-      <button class="button button-primary" data-action="start-cards">Cook this dish</button>
-    </div>
   </article>
 `;
 
