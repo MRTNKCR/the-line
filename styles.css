@@ -200,6 +200,68 @@ body {
   padding: 0.45rem 0.55rem;
 }
 
+.ingredient-search-input {
+  border: 2px solid var(--text);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  padding: 0.45rem 0.55rem;
+}
+
+.ingredient-chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ingredient-chip {
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--accent);
+  font-size: 0.82rem;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+}
+
+.ingredient-chip:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.ingredient-options {
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  padding: 0.45rem;
+  max-height: 220px;
+  overflow-y: auto;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.ingredient-option {
+  width: 100%;
+  border: 2px solid var(--text);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: left;
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.ingredient-option.selected {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.ingredient-option:hover {
+  border-color: var(--accent);
+}
+
 .detail-layout {
   display: grid;
   gap: 1rem;
