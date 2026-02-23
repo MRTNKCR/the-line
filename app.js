@@ -16,6 +16,8 @@ const state = {
   filters: {
     cuisine: "all",
     timeBucket: "all",
+    ingredientIds: [],
+    ingredientQuery: "",
   },
 };
 
@@ -30,6 +32,71 @@ const TIME_BUCKET_OPTIONS = [
   { id: "2-3", label: "2-3 hours" },
   { id: "3+", label: "More than 3 hours" },
 ];
+
+const normalizeWord = (value) => {
+  const cleaned = String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (cleaned.length <= 2) {
+    return cleaned;
+  }
+  if (cleaned.endsWith("ies") && cleaned.length > 4) {
+    return `${cleaned.slice(0, -3)}y`;
+  }
+  if (cleaned.endsWith("oes") && cleaned.length > 4) {
+    return cleaned.slice(0, -2);
+  }
+  if (cleaned.endsWith("os") && cleaned.length > 4) {
+    return cleaned.slice(0, -1);
+  }
+  if (cleaned.endsWith("es") && cleaned.length > 4) {
+    return cleaned.slice(0, -2);
+  }
+  if (cleaned.endsWith("s") && cleaned.length > 3) {
+    return cleaned.slice(0, -1);
+  }
+  return cleaned;
+};
+
+const toIngredientTokens = (value) =>
+  String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map(normalizeWord)
+    .filter(Boolean);
+
+const normalizeIngredientKey = (value) => toIngredientTokens(value).join(" ");
+
+const ingredientOptionMap = new Map();
+for (const recipe of RECIPES) {
+  for (const ingredient of recipe.ingredients) {
+    const key = normalizeIngredientKey(ingredient.name);
+    if (!key) {
+      continue;
+    }
+    if (!ingredientOptionMap.has(key)) {
+      ingredientOptionMap.set(key, {
+        id: key,
+        label: ingredient.name,
+        tokens: toIngredientTokens(ingredient.name),
+      });
+    }
+  }
+}
+
+const INGREDIENT_OPTIONS = Array.from(ingredientOptionMap.values()).sort((a, b) =>
+  a.label.localeCompare(b.label, "en")
+);
+const INGREDIENT_OPTION_ID_SET = new Set(INGREDIENT_OPTIONS.map((opt) => opt.id));
+
+const recipeIngredientTokenMap = new Map(
+  RECIPES.map((recipe) => [
+    recipe.id,
+    new Set(
+      recipe.ingredients.flatMap((ingredient) => toIngredientTokens(ingredient.name))
+    ),
+  ])
+);
 
 const TIME_BUCKET_ID_SET = new Set(TIME_BUCKET_OPTIONS.map((bucket) => bucket.id));
 const CUISINE_OPTION_SET = new Set(CUISINE_OPTIONS);
@@ -241,18 +308,69 @@ const matchesTimeBucket = (totalTimeMin, bucketId) => {
   }
 };
 
+const matchesSelectedIngredients = (recipeId, selectedIngredientIds) => {
+  if (selectedIngredientIds.length === 0) {
+    return true;
+  }
+  const recipeTokens = recipeIngredientTokenMap.get(recipeId);
+  if (!recipeTokens) {
+    return false;
+  }
+  return selectedIngredientIds.every((ingredientId) => {
+    const requiredTokens = ingredientId.split(" ").filter(Boolean);
+    return requiredTokens.every((token) => recipeTokens.has(token));
+  });
+};
+
+const getFilteredIngredientOptions = () => {
+  const queryTokens = toIngredientTokens(state.filters.ingredientQuery);
+  const selectedIdSet = new Set(state.filters.ingredientIds);
+
+  const matched = INGREDIENT_OPTIONS.filter((option) => {
+    if (queryTokens.length === 0) {
+      return true;
+    }
+    return queryTokens.every((queryToken) =>
+      option.tokens.some(
+        (token) => token.includes(queryToken) || queryToken.includes(token)
+      )
+    );
+  });
+
+  matched.sort((a, b) => {
+    const aSelected = selectedIdSet.has(a.id) ? 1 : 0;
+    const bSelected = selectedIdSet.has(b.id) ? 1 : 0;
+    if (aSelected !== bSelected) {
+      return bSelected - aSelected;
+    }
+    return a.label.localeCompare(b.label, "en");
+  });
+
+  return matched.slice(0, 40);
+};
+
 const getFilteredRecipes = () =>
   RECIPES.filter((recipe) => {
     const cuisinePass =
       state.filters.cuisine === "all" || recipe.origin === state.filters.cuisine;
     const timePass = matchesTimeBucket(recipe.totalTimeMin, state.filters.timeBucket);
-    return cuisinePass && timePass;
+    const ingredientPass = matchesSelectedIngredients(
+      recipe.id,
+      state.filters.ingredientIds
+    );
+    return cuisinePass && timePass && ingredientPass;
   });
 
 const renderHome = () => {
   const filteredRecipes = getFilteredRecipes();
+  const filteredIngredientOptions = getFilteredIngredientOptions();
+  const selectedIngredients = state.filters.ingredientIds
+    .map((id) => ingredientOptionMap.get(id))
+    .filter(Boolean);
   const hasActiveFilters =
-    state.filters.cuisine !== "all" || state.filters.timeBucket !== "all";
+    state.filters.cuisine !== "all" ||
+    state.filters.timeBucket !== "all" ||
+    state.filters.ingredientIds.length > 0;
 
   return `
     <section class="home-screen">
@@ -299,6 +417,67 @@ const renderHome = () => {
                     `
                   ).join("")}
                 </select>
+              </div>
+
+              <div class="filter-field">
+                <label for="ingredient-filter-search">Ingredients (multi-select)</label>
+                <input
+                  id="ingredient-filter-search"
+                  class="ingredient-search-input"
+                  type="search"
+                  placeholder="Search ingredients (e.g. flour, basil, tomatoes)"
+                  data-action="filter-ingredient-search"
+                  value="${escapeHtml(state.filters.ingredientQuery)}"
+                />
+                ${
+                  selectedIngredients.length > 0
+                    ? `
+                      <div class="ingredient-chip-wrap">
+                        ${selectedIngredients
+                          .map(
+                            (option) => `
+                              <button
+                                class="ingredient-chip"
+                                data-action="remove-ingredient"
+                                data-id="${escapeHtml(option.id)}"
+                              >
+                                ${escapeHtml(option.label)} ×
+                              </button>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                    `
+                    : `<p class="muted">No ingredients selected yet.</p>`
+                }
+                <div class="ingredient-options" role="listbox" aria-label="Ingredient options">
+                  ${
+                    filteredIngredientOptions.length > 0
+                      ? filteredIngredientOptions
+                          .map(
+                            (option) => `
+                              <button
+                                class="ingredient-option ${
+                                  state.filters.ingredientIds.includes(option.id)
+                                    ? "selected"
+                                    : ""
+                                }"
+                                data-action="toggle-ingredient"
+                                data-id="${escapeHtml(option.id)}"
+                                aria-pressed="${
+                                  state.filters.ingredientIds.includes(option.id)
+                                    ? "true"
+                                    : "false"
+                                }"
+                              >
+                                ${escapeHtml(option.label)}
+                              </button>
+                            `
+                          )
+                          .join("")
+                      : `<p class="muted">No ingredient options match your search.</p>`
+                  }
+                </div>
               </div>
             </div>
 
@@ -669,6 +848,34 @@ app.addEventListener("click", (event) => {
     case "clear-filters": {
       state.filters.cuisine = "all";
       state.filters.timeBucket = "all";
+      state.filters.ingredientIds = [];
+      state.filters.ingredientQuery = "";
+      render();
+      break;
+    }
+    case "toggle-ingredient": {
+      const ingredientId = target.dataset.id;
+      if (!ingredientId || !INGREDIENT_OPTION_ID_SET.has(ingredientId)) {
+        return;
+      }
+      const currentIds = new Set(state.filters.ingredientIds);
+      if (currentIds.has(ingredientId)) {
+        currentIds.delete(ingredientId);
+      } else {
+        currentIds.add(ingredientId);
+      }
+      state.filters.ingredientIds = Array.from(currentIds);
+      render();
+      break;
+    }
+    case "remove-ingredient": {
+      const ingredientId = target.dataset.id;
+      if (!ingredientId) {
+        return;
+      }
+      state.filters.ingredientIds = state.filters.ingredientIds.filter(
+        (id) => id !== ingredientId
+      );
       render();
       break;
     }
@@ -699,6 +906,22 @@ app.addEventListener("change", (event) => {
       ? nextValue
       : "all";
     render();
+  }
+});
+
+app.addEventListener("input", (event) => {
+  const target = event.target.closest("[data-action='filter-ingredient-search']");
+  if (!target) {
+    return;
+  }
+  const nextValue = target.value ?? "";
+  state.filters.ingredientQuery = nextValue;
+  render();
+
+  const nextInput = app.querySelector("#ingredient-filter-search");
+  if (nextInput) {
+    nextInput.focus();
+    nextInput.setSelectionRange(nextValue.length, nextValue.length);
   }
 });
 
